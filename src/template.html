@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang='en'>
+<head>
+	<meta charset='utf-8'>
+	<meta name='viewport' content='width=device-width,initial-scale=1.0'>
+	<meta name='theme-color' content='#333333'>
+
+	%sapper.base%
+
+	<link rel='manifest' href='manifest.json' crossorigin='use-credentials'>
+	<link rel='icon' type='image/svg' href='/agiledata-logo-icon-purple-dropdown.svg'/>
+
+  <style>
+		@font-face { font-family: Nunito; src: url('/fonts/Nunito-Regular.ttf'); }
+		@font-face { font-family: Nunito; font-weight: bold; src: url('/fonts/Nunito-Bold.ttf');}
+		@font-face { font-family: Nunito; font-weight: extra-bold; src: url('/fonts/Nunito-ExtraBold.ttf');}
+		@font-face { font-family: Nunito; font-weight: extra-light; src: url('/fonts/Nunito-ExtraLight.ttf');}
+		@font-face { font-family: Nunito; font-weight: semi-bold; src: url('/fonts/Nunito-SemiBold.ttf');}
+  </style>
+	<!-- Sapper generates a <style> tag containing critical CSS
+	     for the current page. CSS for the rest of the app is
+	     lazily loaded when it precaches secondary pages -->
+	%sapper.styles%
+
+	<link rel='stylesheet' href='/css/custom.css'>
+	<!-- This contains the contents of the <svelte:head> component, if
+	     the current page has one -->
+	%sapper.head%
+	<link rel="stylesheet" href="/fontawesome/css/all.min.css">
+	<script src="/jquery-slim/dist/jquery.slim.min.js" defer>
+	</script>
+	<script src="/bootstrap/dist/js/bootstrap.bundle.min.js" defer>
+	</script>
+</head>
+<body>
+	<!-- The application will be rendered inside this element,
+	     because `src/client.js` references it -->
+	<div id='sapper'> <!-- onwheel={hidePopups} onclick={hidePopups}> -->
+		%sapper.html%
+	</div>
+
+	<!-- Sapper creates a <script> tag containing `src/client.js`
+	     and anything else it needs to hydrate the app and
+	     initialise the router -->
+	%sapper.scripts%
+</body>
+</html>

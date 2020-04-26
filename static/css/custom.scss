@@ -1,0 +1,90 @@
+@import "variables";
+
+$underline-color: $chalkwhite;
+$underline-dark-color: $success;
+
+$underline-duration: .2s;
+$underline-distance: 4px;
+$underline-easeOutBack: cubic-bezier(0.175, 0.885, 0.320, 1.275);
+
+.under {
+  position: relative;
+  text-decoration: none;
+  padding-bottom: 8px;
+
+  &:before,
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 0; right: 0;
+    height: 4px;
+    background-color: $underline-color;
+  }
+  &:before {
+    opacity: 0;
+    transform: translateY(- $underline-distance);
+    transition: transform 0s $underline-easeOutBack, opacity 0s;
+  }
+  &:after {
+    opacity: 0;
+    transform: translateY($underline-distance/2);
+    transition: transform $underline-duration $underline-easeOutBack, opacity $underline-duration;
+  }
+  &:hover,
+  &:focus {
+    &:before,
+    &:after {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    &:before {
+      transition: transform $underline-duration $underline-easeOutBack, opacity $underline-duration;
+    }
+    &:after {
+      transition: transform 0s $underline-duration $underline-easeOutBack, opacity 0s $underline-duration;
+    }
+  }
+}
+
+.under-dark {
+  position: relative;
+  text-decoration: none;
+  padding-bottom: 8px;
+
+  &:before,
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0; right: 0;
+    height: 4px;
+    background-color: $underline-dark-color;
+  }
+  &:before {
+    opacity: 0;
+    transform: translateY(- $underline-distance);
+    transition: transform 0s $underline-easeOutBack, opacity 0s;
+  }
+  &:after {
+    opacity: 0;
+    transform: translateY($underline-distance/2);
+    transition: transform $underline-duration $underline-easeOutBack, opacity $underline-duration;
+  }
+  &:hover,
+  &:focus {
+    &:before,
+    &:after {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    &:before {
+      transition: transform $underline-duration $underline-easeOutBack, opacity $underline-duration;
+    }
+    &:after {
+      transition: transform 0s $underline-duration $underline-easeOutBack, opacity 0s $underline-duration;
+    }
+  }
+}
+
+@import "../bootstrap/scss/bootstrap.scss";
