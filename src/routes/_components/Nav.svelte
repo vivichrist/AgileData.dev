@@ -113,19 +113,24 @@
   <div class="collapse navbar-collapse align-items-stretch" id="collapsibleNavbar">
     <MenuDrop title="Icealicous" items="{menus.Icealicous}" />
     <nav class="navbar-nav align-items-stretch justify-content-around left">
-      <div class="nav-item d-flex flex-fill btn-group align-self-center under">
+      <div class="nav-item d-flex flex-fill btn-group align-self-center under"
+           class:current={segment === 'catalog'}>
         <TopItem item="app/catalog">Catalog</TopItem>
       </div>
-      <div class="nav-item d-flex flex-fill btn-group align-self-center under">
+      <div class="nav-item d-flex flex-fill btn-group align-self-center under"
+           class:current={segment === 'events'}>
         <MenuItem title="Events" items="{menus.Events}" />
       </div>
-      <div class="nav-item d-flex flex-fill btn-group align-self-center under">
+      <div class="nav-item d-flex flex-fill btn-group align-self-center under"
+           class:current={segment === 'rules'}>
         <MenuItem title="Rules" items="{menus.Rules}" />
       </div>
-      <div class="nav-item d-flex flex-fill btn-group align-self-center under">
+      <div class="nav-item d-flex flex-fill btn-group align-self-center under"
+           class:current={segment === 'consume'}>
         <MenuItem title="Consume" items="{menus.Consume}" />
       </div>
-      <div class="nav-item d-flex flex-fill btn-group align-self-center under">
+      <div class="nav-item d-flex flex-fill btn-group align-self-center under"
+           class:current={segment === 'search'}>
         <TopItem item="app/search">Manage</TopItem>
       </div>
     </nav>
