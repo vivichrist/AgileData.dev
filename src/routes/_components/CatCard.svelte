@@ -8,8 +8,9 @@
 
 <div class="card bg-{colour}">
   <div class="card-body m-0 p-1" data-toggle="popover" title="{item.alias}"
-        data-trigger="focus" data-template={
-        `<div class="popover dropdown-menu">
+       href="app/catalog-details" on:click={() => $pageseg = item}
+       data-trigger="focus" data-template={
+      `<div class="popover dropdown-menu">
           <h3 class="popover-header"></h3>
           <div class="dropdown-item text-dark"> View <span class="popover-body m-0 p-0"></span> Concept </div>
           <div class="dropdown-item text-dark"> View <span class="popover-body m-0 p-0"></span> Detail </div>
