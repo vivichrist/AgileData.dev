@@ -1,4 +1,5 @@
 <script>
+  import { goto } from '@sapper/app';
   import { pageseg } from "../../stores.js";
   export let colour = "primary";
   export let item = {};
@@ -8,7 +9,10 @@
 
 <div class="card bg-{colour}">
   <div class="card-body m-0 p-1" data-toggle="popover" title="{item.alias}"
-       href="app/catalog-details" on:click={() => $pageseg = item}
+       on:click={async () => {
+                  $pageseg = item;
+                  await goto('app/catalog-details');
+                }}
        data-trigger="focus" data-template={
       `<div class="popover dropdown-menu">
           <h3 class="popover-header"></h3>
