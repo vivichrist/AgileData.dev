@@ -1,34 +1,39 @@
-<script>
-  export let filterfn = undefined;
-</script>
-
 <ul class="nav sticky-top vw-100 nav-fill bg-white border-bottom border-ternary">
-    <li class="nav-item" on:click={() => filterfn("topics")}>
-      <span role="button" class="nav-link under-dark">Topics</span>
-    </li>
-    <li class="nav-item" on:click={() => filterfn("event")}>
-      <span role="button" class="nav-link under-dark">Events</span>
-    </li>
-    <li class="nav-item" on:click={() => filterfn("concept")}>
-      <span role="button" class="nav-link under-dark">Concepts</span>
-    </li>
-    <li class="nav-item" on:click={() => filterfn("detail")}>
-      <span role="button" class="nav-link under-dark">Details</span>
-    </li>
-    <li class="nav-item" on:click={() => filterfn("history")}>
-      <span role="button" class="nav-link under-dark">History</span>
-    </li>
-    <li class="nav-item" on:click={() => filterfn("consume")}>
-      <span role="button" class="nav-link under-dark">Consume</span>
+    <li class="nav-item">
+      <a role="button" class="nav-link under-dark"
+         href="app/catalog?filter=topics">Topics</a>
     </li>
     <li class="nav-item">
-      <span role="button" class="nav-link under-dark">Recently Added</span>
+      <a role="button" class="nav-link under-dark"
+         href="app/catalog?filter=event">Events</a>
     </li>
     <li class="nav-item">
-      <span role="button" class="nav-link under-dark">Most Viewed</span>
+      <a role="button" class="nav-link under-dark"
+         href="app/catalog?filter=concept">Concepts</a>
     </li>
-    <li class="nav-item" on:click={() => filterfn("reset")}>
-      <span role="button" class="nav-link under-dark">My Lists</span>
+    <li class="nav-item">
+      <a role="button" class="nav-link under-dark"
+         href="app/catalog?filter=detail">Details</a>
+    </li>
+    <li class="nav-item">
+      <a role="button" class="nav-link under-dark"
+         href="app/catalog?filter=history">History</a>
+    </li>
+    <li class="nav-item">
+      <a role="button" class="nav-link under-dark"
+         href="app/catalog?filter=consume">Consume</a>
+    </li>
+    <li class="nav-item">
+      <a role="button" class="nav-link under-dark"
+         href="#">Recently Added</a>
+    </li>
+    <li class="nav-item">
+      <a role="button" class="nav-link under-dark"
+         href="#">Most Viewed</a>
+    </li>
+    <li class="nav-item">
+      <a role="button" class="nav-link under-dark"
+         href="app/catalog?filter=reset">My Lists</a>
     </li>
 </ul>
 

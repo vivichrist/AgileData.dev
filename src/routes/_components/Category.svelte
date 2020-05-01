@@ -5,7 +5,6 @@
   export let data = [];
   export let name = "Missing Category";
   export let type = "NoCategory";
-  export let filterfn = undefined;
 
   let rng = Math.floor(window.outerWidth / 235);
 
@@ -36,19 +35,18 @@
     {#each [...Array(limit).keys()] as i}
         <li data-target="#{type}Captions"
             data-slide-to={i == limit ? 0 : i}
-            class="{i === 0 ? 'active' : ''}">
+            class:active={i === 0}>
         </li>
     {/each}
     </ol>
     {/if}
     <div class="carousel-inner">
       {#each [...Array(limit).keys()] as i}
-        <div class="carousel-item {i == 0 ? 'active' : ''}">
+        <div class="carousel-item" class:active={i == 0}>
         <div class="d-flex bd-highlight justify-content-start">
         {#each data.slice(rng * i, Math.min(rng * (i + 1), data.length)) as item}
           <CatCard colour={item.object} item={item}
-                   handlePopup={handlePopup}
-                   filterfn={filterfn} />
+                   handlePopup={handlePopup} />
         {/each}
         </div>
         </div>
