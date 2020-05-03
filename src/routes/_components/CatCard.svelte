@@ -1,5 +1,4 @@
 <script>
-  import { goto } from '@sapper/app';
   import { pageseg } from "../../stores.js";
   export let colour = "primary";
   export let item = {};
@@ -9,7 +8,7 @@
 
 <div class="card bg-{colour}">
   <div class="card-body m-0 p-1" data-toggle="popover" title="{item.alias}"
-       on:click={() => goto('app/catalog-details?filter=item')}
+       href="app/catalog-details" on:click={() => $pageseg = item}
        data-trigger="focus" data-template={
       `<div class="popover dropdown-menu">
           <h3 class="popover-header"></h3>
@@ -29,7 +28,7 @@
         data-content={item.alias.split(' ')[0]}
         on:contextmenu|preventDefault={handlePopup}>
     <span class="float-right m-0 p-1">
-      <a role="button" class="btn btn-primary btn-sm p-0 m-0 card-icon" href="app/catalog-details?filter=item"}>
+      <a role="button" class="btn btn-primary btn-sm p-0 m-0 card-icon" href="app/catalog-details?filter=item">
         <svg class="bi bi-pencil m-0 p-0" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
           <path fill-rule="evenodd" d="M11.293 1.293a1 1 0 011.414 0l2 2a1 1 0 010 1.414l-9 9a1 1 0 01-.39.242l-3 1a1 1 0 01-1.266-1.265l1-3a1 1 0 01.242-.391l9-9zM12 2l2 2-9 9-3 1 1-3 9-9z" clip-rule="evenodd"/>
           <path fill-rule="evenodd" d="M12.146 6.354l-2.5-2.5.708-.708 2.5 2.5-.707.708zM3 10v.5a.5.5 0 00.5.5H4v.5a.5.5 0 00.5.5H5v.5a.5.5 0 00.5.5H6v-1.5a.5.5 0 00-.5-.5H5v-.5a.5.5 0 00-.5-.5H3z" clip-rule="evenodd"/>
