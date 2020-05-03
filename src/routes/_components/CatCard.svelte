@@ -8,7 +8,7 @@
 
 <div class="card bg-{colour}">
   <div class="card-body m-0 p-1" data-toggle="popover" title="{item.alias}"
-       href="app/catalog-details" on:click={() => $pageseg = item}
+       on:click={() => $pageseg = item}
        data-trigger="focus" data-template={
       `<div class="popover dropdown-menu">
           <h3 class="popover-header"></h3>
@@ -44,7 +44,7 @@
     <p class="card-text my-1">
     {#each item.topics as token}
       <a class="border border-ternary bg-light topic rounded px-1 py-0 m-1"
-            href="app/catalog?filter={token}">
+            href="app/catalog" on:click={() => filterfn(token)}>
         {token}
       </a>
     {/each}

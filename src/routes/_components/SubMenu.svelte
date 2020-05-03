@@ -1,39 +1,50 @@
+<script>
+  export let filterfn = undefined;
+</script>
+
 <ul class="nav sticky-top vw-100 nav-fill bg-white border-bottom border-ternary">
     <li class="nav-item">
       <a role="button" class="nav-link under-dark"
-         href="app/catalog?filter=topics">Topics</a>
+         on:click={filterfn("topics")}
+         href="app/catalog">Topics</a>
     </li>
     <li class="nav-item">
       <a role="button" class="nav-link under-dark"
+         on:click={filterfn("event")}
          href="app/catalog?filter=event">Events</a>
     </li>
     <li class="nav-item">
       <a role="button" class="nav-link under-dark"
-         href="app/catalog?filter=concept">Concepts</a>
+         on:click={filterfn("concept")}
+         href="app/catalog">Concepts</a>
     </li>
     <li class="nav-item">
       <a role="button" class="nav-link under-dark"
-         href="app/catalog?filter=detail">Details</a>
+         on:click={filterfn("topics")}
+         href="app/catalog">Details</a>
     </li>
     <li class="nav-item">
       <a role="button" class="nav-link under-dark"
-         href="app/catalog?filter=history">History</a>
+         on:click={filterfn("topics")}
+         href="app/catalog">History</a>
     </li>
     <li class="nav-item">
       <a role="button" class="nav-link under-dark"
-         href="app/catalog?filter=consume">Consume</a>
+         on:click={filterfn("topics")}
+         href="app/catalog">Consume</a>
     </li>
     <li class="nav-item">
       <a role="button" class="nav-link under-dark"
-         href="#">Recently Added</a>
+         href="app/catalog">Recently Added</a>
     </li>
     <li class="nav-item">
       <a role="button" class="nav-link under-dark"
-         href="#">Most Viewed</a>
+         href="app/catalog">Most Viewed</a>
     </li>
     <li class="nav-item">
       <a role="button" class="nav-link under-dark"
-         href="app/catalog?filter=reset">My Lists</a>
+         on:click={filterfn("reset")}
+         href="app/catalog">My Lists</a>
     </li>
 </ul>
 

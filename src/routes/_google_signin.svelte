@@ -8,7 +8,7 @@
     <img id="logo" src="/agiledata-logo-icon-white.svg" alt="agile data logo"/>
   </div>
   <a id="customBtn" class="SignIn btn btn-outline-primary border-0"
-     href="app/catalog" on:click="{window.onSignIn}" role="button">
+     href="app/catalog" role="button">
     <span class="text-info align-center">Login</span>
   </a>
 </div>

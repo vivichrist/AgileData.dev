@@ -40,13 +40,13 @@
 
 <script>
   import { beforeUpdate } from 'svelte';
-  import { stores } from '@sapper/app';
+  // import { stores } from '@sapper/app';
   import { popup } from "../../stores.js";
   import Category from '../_components/Category.svelte';
   import SubMenu from "../_components/SubMenu.svelte";
 
-  const { preloading, page, session } = stores();
-  const pagefilter = page.query.filter || "";
+  // const { preloading, page, session } = stores();
+  // const pagefilter = page.query.filter || "";
 
   // console.log(data);
   let cat_filter = new Map([...categories.keys()].map(k => [k, true]));
@@ -132,23 +132,24 @@
     };
   };
 
-  if (pagefilter.length !== 0) {
-    filter_by(pagefilter);
-  }
+  // if (pagefilter.length !== 0) {
+  //   filter_by(pagefilter);
+  // }
 
   window.hidePopups = () => window.$($popup).popover('hide');
   window.$('[data-toggle="popover"]').popover({ container: 'body' });
 </script>
 
-<SubMenu />
+<SubMenu filterfn={filter_by} />
 {#each Array.from(categories) as [cat, thedata]}
   {#if cat_filter.get(cat)}
     <Category name="{cat[0].toUpperCase() + cat.substr(1)} Area"
-              type={cat} data={thedata} />
+              type={cat} data={thedata} filterfn={filter_by} />
   {/if}
 {/each}
 {#each Array.from(topics) as [topic, thedata]}
   {#if (top_filter.get(topic) && thedata.length > 0)}
-    <Category name="{topic} Topic" type={topic} data={thedata} />
+    <Category name="{topic} Topic" type={topic} data={thedata}
+              filterfn={filter_by} />
   {/if}
 {/each}
