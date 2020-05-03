@@ -7,9 +7,10 @@
   <div class="lc">
     <img id="logo" src="/agiledata-logo-icon-white.svg" alt="agile data logo"/>
   </div>
-  <a id="customBtn" class="SignIn btn btn-outline-primary border-0"
+  <a id="customBtn" class="SignIn btn border-0"
      href="app/catalog" role="button">
-    <span class="text-info align-center">Login</span>
+    <i class="fab fa-google mr-2"></i>
+    <span class="text-ternsry align-center">Login</span>
   </a>
 </div>
 
@@ -24,10 +25,11 @@
     text-align: center;
   }
   #customBtn {
-    background-color: #755A9955;
+    color: var(--ternary);
+    background-color: white;
     background-blend-mode: color-burn;
     margin-top: 2vh;
-    width: 15rem;
+    width: 10em;
   }
   #customBtn:hover {
     cursor: pointer;
