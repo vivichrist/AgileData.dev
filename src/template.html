@@ -20,6 +20,7 @@
 
 	<script src="https://apis.google.com/js/api:client.js" async defer></script>
 	<script async defer>
+
 		window.onSignIn = (user) => {
       // Useful data for your client-side scripts:
       const profile = user.getBasicProfile();
@@ -68,6 +69,7 @@
         );
       });
     };
+
 	</script>
 	<!-- Sapper generates a <style> tag containing critical CSS
 	     for the current page. CSS for the rest of the app is
@@ -87,7 +89,7 @@
 <body onload='startApp'>
 	<!-- The application will be rendered inside this element,
 	     because `src/client.js` references it -->
-	<div id='sapper'> <!-- onwheel={hidePopups} onclick={hidePopups}> -->
+	<div id='sapper'>
 		%sapper.html%
 	</div>
 

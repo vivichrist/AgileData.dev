@@ -1,4 +1,6 @@
 <script context="module">
+	import TopItem from "./../_components/TopItem.svelte";
+	import Category from "./../_components/Category.svelte";
   let categories = new Map();
   let topics = new Map();
   let data = [];
@@ -36,21 +38,44 @@
       });
     });
   };
+
 </script>
 
 <script>
-  import { beforeUpdate } from 'svelte';
+  import { beforeUpdate, onMount, onDestroy } from 'svelte';
   // import { stores } from '@sapper/app';
   import { popup } from "../../stores.js";
-  import Category from '../_components/Category.svelte';
-  import SubMenu from "../_components/SubMenu.svelte";
+  const all_cat = [...categories.keys()];
+  const all_top = [...topics.keys()];
+
+  let Category;
+  let SubMenu;
+  onMount(async () => {
+    const module1 = await import('../_components/Category.svelte');
+    const module2 = await import( "../_components/SubMenu.svelte");
+    Category = module1.default;
+    SubMenu = module2.default;
+
+    window.hidePopups = () => {
+      let p = $popup;
+      window.$(p).popover('hide');
+    };
+
+    window.$('[data-toggle="popover"]').popover({ container: 'body' });
+  });
+
+  onDestroy(() => {
+    categories.clear();
+    topics.clear();
+    data.length = 0;
+  });
 
   // const { preloading, page, session } = stores();
   // const pagefilter = page.query.filter || "";
 
   // console.log(data);
-  let cat_filter = new Map([...categories.keys()].map(k => [k, true]));
-  let top_filter = new Map(    [...topics.keys()].map(k => [k, true]));
+  let cat_filter = [...categories.keys()];
+  let top_filter = [...topics.keys()];
 
   const filter_maps = (obj) => {
     if (categories.has(obj.object)) {
@@ -73,18 +98,20 @@
   }
 
   const compareKV = (a, b) => {
-    return a[1].length - b[1].length;
+    if (topics.has(a) && topics.has(b))
+      return topics.get(a).length - topics.get(b).length;
+    return 0;
   }
 
   const refilter_maps = (obj) => {
-    if (cat_filter.get(obj.object)) {
+    if (cat_filter.find((e) => e === obj.object)) {
       if (categories.has(obj.object)) {
         categories.get(obj.object).push(obj);
       } else {
         categories.set(obj.object, [obj]);
       };
       obj.topics.forEach(element => {
-        if (top_filter.get(element)) {
+        if (top_filter.find((e) => e === element)) {
           if (topics.has(element)) {
             topics.get(element).push(obj);
           } else {
@@ -95,61 +122,69 @@
     };
   };
 
-  const filter_by = (f) => {
-    if (typeof f === "string") {
+  $: filter_by = (f) => {
+
+    if (typeof(f) === "string") {
       if (f === "reset") { // Everything
         beforeUpdate(() => {
           reset_maps();
           data.forEach(e => filter_maps(e));
         });
-        for (const k of cat_filter.keys()) {cat_filter.set(k, true);}
-        for (const k of top_filter.keys()) {top_filter.set(k, true);}
+        cat_filter = all_cat;
+        top_filter = all_top;
       } else if (f === "topics") { // All topics
-        for (const k of top_filter.keys()) {top_filter.set(k, true);}
-        for (const k of cat_filter.keys()) {cat_filter.set(k, false);}
+        top_filter = all_top;
+        cat_filter.length = 0;
+        top_filter.sort(compareKV);
       } else {
-        if (cat_filter.keys().some(e => e === f)) {
-          for (const k of cat_filter.keys()) {cat_filter.set(k, k === f);}
-          beforeUpdate(() => {
-            reset_maps();
-            data.forEach(e => refilter_maps(e));
-          });
+        if (all_cat.some(e => e === f)) {
+          cat_filter.length = 0;
+          cat_filter = [f, ...cat_filter];
+        } else if (all_top.some(e => e === f)) {
+          top_filter.length = 0;
+          top_filter = [f, ...top_filter];
         }
+        beforeUpdate(() => {
+          reset_maps();
+          data.forEach(e => refilter_maps(e));
+        });
       };
+      console.log(`filter by: ${f}`);
     } else if (Array.isArray(f)) { // should be an array of strings
-      if (Object.keys(cat_filter).some(e => f.some(k => k === e))) {
-        for (const k of categories.keys()) {
-          cat_filter[k] = f.some(d => d === k);
-        }};
-      if (Object.keys(top_filter).some(e => f.some(k => k === e))) {
-        for (const k of topics.keys()) {
-          top_filter[k] = f.some(d => d === k);
-        }};
+      if (f.length === 0) return;
+      cat_filter.length = 0;
+      top_filter.length = 0;
+      for (const e of f) {
+        if (all_cat.find(k => k === e)) cat_filter = [e, ...cat_filter];
+        if (all_top.find(k => k === e)) top_filter = [e, ...top_filter];
+      }
       beforeUpdate(() => {
         reset_maps();
         data.forEach(e => refilter_maps(e));
       });
+      console.log(`filter with: ${f}`);
     };
   };
 
   // if (pagefilter.length !== 0) {
   //   filter_by(pagefilter);
   // }
-
-  window.hidePopups = () => window.$($popup).popover('hide');
-  window.$('[data-toggle="popover"]').popover({ container: 'body' });
 </script>
 
-<SubMenu filterfn={filter_by} />
-{#each Array.from(categories) as [cat, thedata]}
-  {#if cat_filter.get(cat)}
-    <Category name="{cat[0].toUpperCase() + cat.substr(1)} Area"
-              type={cat} data={thedata} filterfn={filter_by} />
+<svelte:component this={SubMenu} filterfn={filter_by} />
+{#each cat_filter as cat}
+  {#if categories.get(cat).length > 0}
+    <svelte:component this={Category}
+                      name="{cat[0].toUpperCase() + cat.substr(1)} Area"
+                      type={cat} data={categories.get(cat)}
+                      filterfn={filter_by} />
   {/if}
 {/each}
-{#each Array.from(topics) as [topic, thedata]}
-  {#if (top_filter.get(topic) && thedata.length > 0)}
-    <Category name="{topic} Topic" type={topic} data={thedata}
-              filterfn={filter_by} />
+{#each top_filter as topic}
+  {#if topics.get(topic).length > 0}
+    <svelte:component this={Category}
+                      name="{topic} Topic"
+                      type={topic} data={topics.get(topic)}
+                      filterfn={filter_by} />
   {/if}
 {/each}

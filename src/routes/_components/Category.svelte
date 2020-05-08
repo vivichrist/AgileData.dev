@@ -17,7 +17,9 @@
 
   const handlePopup = (e) => {
     window.$($popup).popover('hide');
-    window.$(e.target).popover('toggle');
+    if ($popup !== e.target) {
+      window.$(e.target).popover('toggle');
+    }
     $popup = e.target;
   };
 </script>
