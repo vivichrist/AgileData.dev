@@ -7,12 +7,12 @@
   export let type = "NoCategory";
   export let filterfn = undefined;
 
-  let rng = Math.floor(window.outerWidth / 235);
+  let rng = Math.floor(window.innerWidth / 235);
 
   $: limit = Math.ceil(data.length / rng);
 
   const handleWidth = ()  => {
-    rng = Math.floor(window.outerWidth / 235);
+    rng = Math.floor(window.innerWidth / 235);
   };
 
   const handlePopup = (e) => {
@@ -24,7 +24,7 @@
   };
 </script>
 
-<svelte:window on:resize={handleWidth} />
+<svelte:window on:resize={handleWidth} on:load={handleWidth}/>
 
 <div class="d-inline-flex flex-row flex-fill justify-content-start"
      style="width: calc({Math.min(data.length, rng) * 225}px + 2rem);">
