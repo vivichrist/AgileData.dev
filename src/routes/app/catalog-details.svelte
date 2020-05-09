@@ -70,14 +70,14 @@
 
 <style>
   .nav-link {
-    border-width: 0 0 0 1px;
+    border-radius: 0 0.5rem 0.5rem 0;
   }
   .nav-link.active {
-    background-color: azure;
+    background-color: var(--primary);
+    color: black;
     border-left-width: 0;
     border-radius: 0 0.25rem 0.25rem 0;
   }
-
   .nav-link:hover {
     border-left-width: 0;
     border-radius: 0 0.25rem 0.25rem 0;
