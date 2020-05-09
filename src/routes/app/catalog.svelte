@@ -75,7 +75,7 @@
 
   // console.log(data);
   let cat_filter = [...categories.keys()];
-  let top_filter = [...topics.keys()];
+  let top_filter = [...topics.keys()].sort();
 
   const filter_maps = (obj) => {
     if (categories.has(obj.object)) {
@@ -98,28 +98,26 @@
   }
 
   const compareKV = (a, b) => {
-    if (topics.has(a) && topics.has(b))
-      return topics.get(a).length - topics.get(b).length;
-    return 0;
+    return topics.get(a).length - topics.get(b).length;
   }
 
   const refilter_maps = (obj) => {
-    if (cat_filter.find((e) => e === obj.object)) {
+    if (cat_filter.find(e => e === obj.object)) {
       if (categories.has(obj.object)) {
         categories.get(obj.object).push(obj);
       } else {
         categories.set(obj.object, [obj]);
       };
-      obj.topics.forEach(element => {
-        if (top_filter.find((e) => e === element)) {
-          if (topics.has(element)) {
-            topics.get(element).push(obj);
-          } else {
-            topics.set(element, [obj]);
-          };
-        };
-      });
     };
+    obj.topics.forEach(element => {
+      if (top_filter.find(e => e === element)) {
+        if (topics.has(element)) {
+          topics.get(element).push(obj);
+        } else {
+          topics.set(element, [obj]);
+        };
+      };
+    });
   };
 
   $: filter_by = (f) => {
@@ -129,24 +127,28 @@
         beforeUpdate(() => {
           reset_maps();
           data.forEach(e => filter_maps(e));
+          cat_filter = all_cat;
+          top_filter = all_top;
+          top_filter.sort();
         });
-        cat_filter = all_cat;
-        top_filter = all_top;
       } else if (f === "topics") { // All topics
-        top_filter = all_top;
-        cat_filter.length = 0;
-        top_filter.sort(compareKV);
+        beforeUpdate(() => {
+          reset_maps();
+          data.forEach(e => filter_maps(e));
+          cat_filter.length = 0;
+          top_filter = all_top;
+          top_filter.sort();
+        });
       } else {
         if (all_cat.some(e => e === f)) {
-          cat_filter.length = 0;
-          cat_filter = [f, ...cat_filter];
+          cat_filter = [f];
         } else if (all_top.some(e => e === f)) {
-          top_filter.length = 0;
-          top_filter = [f, ...top_filter];
+          top_filter = [f];
         }
         beforeUpdate(() => {
           reset_maps();
           data.forEach(e => refilter_maps(e));
+          top_filter.sort();
         });
       };
       console.log(`filter by: ${f}`);
