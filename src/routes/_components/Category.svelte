@@ -5,7 +5,7 @@
   export let data = [];
   export let name = "Missing Category";
   export let type = "NoCategory";
-  export let filterfn = undefined;
+  export let filterstr = "";
 
   let rng = Math.floor(window.innerWidth / 235);
 
@@ -49,7 +49,7 @@
         <div class="d-flex bd-highlight justify-content-start">
         {#each data.slice(rng * i, Math.min(rng * (i + 1), data.length)) as item}
           <CatCard colour={item.object} item={item}
-                   handlePopup={handlePopup} {filterfn} />
+                   handlePopup={handlePopup} bind:filterstr={filterstr} />
         {/each}
         </div>
         </div>

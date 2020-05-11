@@ -1,6 +1,4 @@
 <script context="module">
-	import TopItem from "./../_components/TopItem.svelte";
-	import Category from "./../_components/Category.svelte";
   let categories = new Map();
   let topics = new Map();
   let data = [];
@@ -10,7 +8,7 @@
       'https://agiledata-core-prd.appspot.com/tables/?apikey=977609nhgfty86HJKhjkl78')
       .then(res => {
         if (!res.ok) {
-          throw new Error('Network response for Catagory views was not ok');
+          throw new Error('Network response for Catagory views has failed');
         }
         return res.json()
       })
@@ -22,8 +20,7 @@
         }
         return obj;
       }));
-    await data.forEach(
-      obj => {
+    await data.forEach(obj => {
       if (categories.has(obj.object)) {
         categories.get(obj.object).push(obj);
       } else {
@@ -73,11 +70,11 @@
   // const { preloading, page, session } = stores();
   // const pagefilter = page.query.filter || "";
 
-  // console.log(data);
+  let filter_str = "";
   let cat_filter = [...categories.keys()];
   let top_filter = [...topics.keys()].sort();
 
-  const filter_maps = (obj) => {
+  const init_maps = (obj) => {
     if (categories.has(obj.object)) {
       categories.get(obj.object).push(obj);
     } else {
@@ -101,7 +98,7 @@
     return topics.get(a).length - topics.get(b).length;
   }
 
-  const refilter_maps = (obj) => {
+  const refilter_exclusive = (obj) => {
     if (cat_filter.find(e => e === obj.object)) {
       if (categories.has(obj.object)) {
         categories.get(obj.object).push(obj);
@@ -120,73 +117,118 @@
     });
   };
 
-  $: filter_by = (f) => {
+  const refilter_cat = (obj, inc) => {
+    if (cat_filter.find(e => e === obj.object)) {
+      if (categories.has(obj.object)) {
+        categories.get(obj.object).push(obj);
+      } else {
+        categories.set(obj.object, [obj]);
+      };
+      if (inc) obj.topics.forEach(element => {
+        if (!top_filter.includes(element)) {
+          top_filter = [element, ...top_filter];
+        }
+      });
+    };
+  }
 
-    if (typeof(f) === "string") {
-      if (f === "reset") { // Everything
+  const refilter_top = (obj,inc) => {
+    obj.topics.forEach(element => {
+      if (top_filter.find(e => e === element)) {
+        if (topics.has(element)) {
+          topics.get(element).push(obj);
+        } else {
+          topics.set(element, [obj]);
+        }
+        if (inc && !cat_filter.includes(obj.object)) {
+          cat_filter = [obj.object, ...cat_filter];
+        }
+      }
+    });
+  }
+
+  const filter_by = (fstr) => {
+
+    if (fstr.length === 0) fstr = "reset";
+
+    if (typeof(fstr) === "string") {
+      if (fstr === "reset") { // Everything
+        reset_maps();
+        data.forEach(e => init_maps(e));
         beforeUpdate(() => {
-          reset_maps();
-          data.forEach(e => filter_maps(e));
           cat_filter = all_cat;
           top_filter = all_top;
           top_filter.sort();
         });
-      } else if (f === "topics") { // All topics
+      } else if (fstr === "topics") { // All topics
+        reset_maps();
+        data.forEach(e => init_maps(e));
         beforeUpdate(() => {
-          reset_maps();
-          data.forEach(e => filter_maps(e));
-          cat_filter.length = 0;
+          cat_filter = [];
           top_filter = all_top;
           top_filter.sort();
         });
-      } else {
-        if (all_cat.some(e => e === f)) {
-          cat_filter = [f];
-        } else if (all_top.some(e => e === f)) {
-          top_filter = [f];
-        }
-        beforeUpdate(() => {
+      } else { // One Area or One Topic
+        if (all_cat.some(e => e === fstr)) {
+          top_filter = [];
+          cat_filter = [fstr];
           reset_maps();
-          data.forEach(e => refilter_maps(e));
-          top_filter.sort();
-        });
+          data.forEach(e => refilter_cat(e, true));
+          [...categories.values()].forEach(arr =>
+            arr.forEach(e => refilter_top(e, false))
+          );
+          // beforeUpdate(() => {
+          // });
+        } else {
+          cat_filter = [];
+          top_filter = [fstr];
+          reset_maps();
+          data.forEach(e => refilter_top(e, true));
+          [...topics.values()].forEach(arr =>
+            arr.forEach(e => refilter_cat(e, false))
+          );
+          // beforeUpdate(() => {
+          // });
+        }
       };
-      console.log(`filter by: ${f}`);
+      console.log(`filter by: ${fstr}`);
+      console.log(cat_filter);
+      console.log([...categories.keys()]);
+      console.log(top_filter);
+      console.log([...topics.keys()]);
     } else if (Array.isArray(f)) { // should be an array of strings
-      if (f.length === 0) return;
       cat_filter.length = 0;
       top_filter.length = 0;
-      for (const e of f) {
-        if (all_cat.find(k => k === e)) cat_filter = [e, ...cat_filter];
-        if (all_top.find(k => k === e)) top_filter = [e, ...top_filter];
+      for (const e of fstr) {
+        if (all_cat.includes(e)) cat_filter = [e, ...cat_filter];
+        if (all_top.includes(e)) top_filter = [e, ...top_filter];
       }
       beforeUpdate(() => {
         reset_maps();
-        data.forEach(e => refilter_maps(e));
+        data.forEach(e => refilter_exclusive(e));
       });
-      console.log(`filter with: ${f}`);
+      console.log(`filter with: ${filter_str}`);
     };
   };
 
-  // if (pagefilter.length !== 0) {
-  //   filter_by(pagefilter);
-  // }
+  $: filter_by(filter_str);
 </script>
 
-<svelte:component this={SubMenu} filterfn={filter_by} />
+<svelte:component this={SubMenu} bind:filterstr={filter_str}
+                  topics={all_top}/>
 {#each cat_filter as cat}
-  {#if categories.get(cat).length > 0}
+  {#if categories.has(cat) && categories.get(cat).length > 0}
     <svelte:component this={Category}
                       name="{cat[0].toUpperCase() + cat.substr(1)} Area"
                       type={cat} data={categories.get(cat)}
-                      filterfn={filter_by} />
+                      bind:filterstr={filter_str} />
   {/if}
 {/each}
 {#each top_filter as topic}
-  {#if topics.get(topic).length > 0}
+  {#if topics.has(topic) && topics.get(topic).length > 0}
     <svelte:component this={Category}
                       name="{topic} Topic"
                       type={topic} data={topics.get(topic)}
-                      filterfn={filter_by} />
+                      bind:filterstr={filter_str} />
   {/if}
 {/each}
