@@ -30,9 +30,11 @@
      style="width: calc({Math.min(data.length, rng) * 225}px + 2rem);">
   <div id="{type}Captions" class="carousel slide flex-fill justify-content-start"
        data-interval="false">
-    <h5 class="d-block text-left font-weight-bold mb-3 pb-0">
-      {name}
-    </h5>
+    <a href="app/catalog" on:click={() => filterstr=type}>
+      <span class="title text-left font-weight-bold mb-3 pb-0" >
+        {name}
+      </span>
+    </a>
     {#if data.length > rng }
     <ol class="carousel-indicators justify-content-end">
     {#each [...Array(limit).keys()] as i}
@@ -46,12 +48,12 @@
     <div class="carousel-inner">
       {#each [...Array(limit).keys()] as i}
         <div class="carousel-item" class:active={i == 0}>
-        <div class="d-flex bd-highlight justify-content-start">
-        {#each data.slice(rng * i, Math.min(rng * (i + 1), data.length)) as item}
-          <CatCard colour={item.object} item={item}
-                   handlePopup={handlePopup} bind:filterstr={filterstr} />
-        {/each}
-        </div>
+          <div class="d-flex bd-highlight justify-content-start">
+          {#each data.slice(rng * i, Math.min(rng * (i + 1), data.length)) as item}
+            <CatCard colour={item.object} item={item}
+                    handlePopup={handlePopup} bind:filterstr={filterstr} />
+          {/each}
+          </div>
         </div>
       {/each}
     </div>
@@ -71,6 +73,10 @@
 </div>
 
 <style>
+  .title {
+    font-size: 18pt;
+    color: black;
+  }
   .carousel {
     height: 18rem;
     margin-right: 3rem;
@@ -86,7 +92,7 @@
   .carousel-indicators {
     bottom: 90%;
     margin-right: 10rem;
-    margin-left: 0;
+    margin-left: 40%;
     padding-right: 0;
     margin-bottom: 0;
   }
