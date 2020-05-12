@@ -28,6 +28,11 @@
   </li>
   <li class="nav-item">
     <a role="button" class="nav-link under-dark"
+        on:click={() => filterstr = "consume"}
+        href="app/catalog">Consume</a>
+  </li>
+  <li class="nav-item">
+    <a role="button" class="nav-link under-dark"
         on:click={() => filterstr = "event"}
         href="app/catalog">Events</a>
   </li>
@@ -45,11 +50,6 @@
     <a role="button" class="nav-link under-dark"
         on:click={() => filterstr = "history"}
         href="app/catalog">History</a>
-  </li>
-  <li class="nav-item">
-    <a role="button" class="nav-link under-dark"
-        on:click={() => filterstr = "consume"}
-        href="app/catalog">Consume</a>
   </li>
   <li class="nav-item">
     <a role="button" class="nav-link under-dark"
