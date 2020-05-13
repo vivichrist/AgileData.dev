@@ -1,5 +1,5 @@
 <script>
-  export let filterstr = "";
+  import { filterstr } from "../../stores.js";
   export let topics = [];
 </script>
 
@@ -12,7 +12,7 @@
     </div>
     <div class="dropdown-menu" aria-labelledby="subMenuAllTopics">
     {#each topics as item}
-      <a class="dropdown-item" on:click={() => filterstr = item}
+      <a class="dropdown-item" on:click={() => $filterstr = item}
         href="app/catalog">{item}</a>
     {:else}
       <div class="spinner-grow text-primary" role="status">
@@ -23,32 +23,32 @@
   </li>
   <li class="nav-item">
     <a role="button" class="nav-link under-dark"
-        on:click={() => filterstr = "topics"}
+        on:click={() => $filterstr = "topics"}
         href="app/catalog">Topics</a>
   </li>
   <li class="nav-item">
     <a role="button" class="nav-link under-dark"
-        on:click={() => filterstr = "consume"}
+        on:click={() => $filterstr = "consume"}
         href="app/catalog">Consume</a>
   </li>
   <li class="nav-item">
     <a role="button" class="nav-link under-dark"
-        on:click={() => filterstr = "event"}
+        on:click={() => $filterstr = "event"}
         href="app/catalog">Events</a>
   </li>
   <li class="nav-item">
     <a role="button" class="nav-link under-dark"
-        on:click={() => filterstr = "concept"}
+        on:click={() => $filterstr = "concept"}
         href="app/catalog">Concepts</a>
   </li>
   <li class="nav-item">
     <a role="button" class="nav-link under-dark"
-        on:click={() => filterstr = "detail"}
+        on:click={() => $filterstr = "detail"}
         href="app/catalog">Details</a>
   </li>
   <li class="nav-item">
     <a role="button" class="nav-link under-dark"
-        on:click={() => filterstr = "history"}
+        on:click={() => $filterstr = "history"}
         href="app/catalog">History</a>
   </li>
   <li class="nav-item">
@@ -61,7 +61,7 @@
   </li>
   <li class="nav-item">
     <a role="button" class="nav-link under-dark"
-        on:click={() => filterstr = "reset"}
+        on:click={() => $filterstr = "reset"}
         href="app/catalog">My Lists</a>
   </li>
 </ul>

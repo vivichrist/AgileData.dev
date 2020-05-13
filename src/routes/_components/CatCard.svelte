@@ -1,10 +1,9 @@
 <script>
   import { goto } from '@sapper/app'
-  import { pageseg } from "../../stores.js";
+  import { pageseg, filterstr } from "../../stores.js";
   export let colour = "primary";
   export let item = {};
   export let handlePopup = undefined;
-  export let filterstr = "";
 
   const detailsPage = () => {
     $pageseg = item;
@@ -69,7 +68,7 @@
     <p class="card-text my-1">
     {#each item.topics as token}
       <span class="btn border border-ternary bg-light topic rounded-pill px-2 py-0 m-1"
-           role="button" on:click={() => filterstr = token}>
+           role="button" on:click={() => $filterstr = token}>
         {token}
       </span>
     {/each}

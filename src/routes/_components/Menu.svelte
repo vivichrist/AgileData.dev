@@ -9,11 +9,17 @@
 </script>
 
 <script>
+  import { onMount } from "svelte";
   import MenuItem from "./MenuItem.svelte";
   import TopItem from "./TopItem.svelte";
   import MenuDrop from "./MenuDrop.svelte";
   import MenuPopup from "./MenuPopup.svelte";
   import Icon from "./Icon.svelte";
+  let CatalogButton;
+  onMount(async () => {
+    const module = await import('./CatalogButton.svelte');
+    CatalogButton = module.default;
+  });
 
   export let user = "No User";
   export let pic = "img/user.png";
@@ -30,7 +36,7 @@
     <MenuDrop title="Icealicous" items="{menus.Icealicous}" />
     <nav class="navbar-nav align-items-stretch justify-content-around left">
       <div class="nav-item d-flex flex-fill btn-group align-self-center under">
-        <TopItem item={2}>Catalog</TopItem>
+        <svelte:component this={CatalogButton} />
       </div>
       <div class="nav-item d-flex flex-fill btn-group align-self-center under">
         <MenuItem title="Events" items="{menus.Events}" />

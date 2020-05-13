@@ -1,11 +1,10 @@
 <script>
-  import { popup } from '../../stores.js'
+  import { popup, filterstr } from '../../stores.js'
   import CatCard from './CatCard.svelte';
 
   export let data = [];
   export let name = "Missing Category";
   export let type = "NoCategory";
-  export let filterstr = "";
 
   let rng = Math.floor(window.innerWidth / 235);
 
@@ -30,7 +29,7 @@
      style="width: calc({Math.min(data.length, rng) * 225}px + 2rem);">
   <div id="{type}Captions" class="carousel slide flex-fill justify-content-start"
        data-interval="false">
-    <a href="app/catalog" on:click={() => filterstr=type}>
+    <a href="app/catalog" on:click={() => $filterstr=type}>
       <span class="title text-left font-weight-bold mb-3 pb-0" >
         {name}
       </span>
@@ -51,7 +50,7 @@
           <div class="d-flex bd-highlight justify-content-start">
           {#each data.slice(rng * i, Math.min(rng * (i + 1), data.length)) as item}
             <CatCard colour={item.object} item={item}
-                    handlePopup={handlePopup} bind:filterstr={filterstr} />
+                    handlePopup={handlePopup} />
           {/each}
           </div>
         </div>
@@ -78,6 +77,7 @@
     color: black;
   }
   .carousel {
+    width: 100vw;
     height: 18rem;
     margin-right: 3rem;
     margin-left: 3rem;
@@ -97,8 +97,8 @@
     margin-bottom: 0;
   }
   .carousel-control-prev {
-    width: 3rem;
     left: -3%;
+    width: 3rem;
   }
   .carousel-control-next {
     right: -3%;

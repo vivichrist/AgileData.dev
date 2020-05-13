@@ -40,8 +40,7 @@
 
 <script>
   import { beforeUpdate, onMount, onDestroy } from 'svelte';
-  // import { stores } from '@sapper/app';
-  import { popup } from "../../stores.js";
+  import { popup, filterstr } from "../../stores.js";
   const all_cat = [...categories.keys()];
   const all_top = [...topics.keys()];
 
@@ -67,10 +66,6 @@
     data.length = 0;
   });
 
-  // const { preloading, page, session } = stores();
-  // const pagefilter = page.query.filter || "";
-
-  let filter_str = "";
   let cat_filter = [...categories.keys()];
   let top_filter = [...topics.keys()].sort();
 
@@ -192,10 +187,6 @@
         }
       };
       console.log(`filter by: ${fstr}`);
-      console.log(cat_filter);
-      console.log([...categories.keys()]);
-      console.log(top_filter);
-      console.log([...topics.keys()]);
     } else if (Array.isArray(f)) { // should be an array of strings
       cat_filter.length = 0;
       top_filter.length = 0;
@@ -207,28 +198,25 @@
         reset_maps();
         data.forEach(e => refilter_exclusive(e));
       });
-      console.log(`filter with: ${filter_str}`);
+      console.log(`filter with: ${fstr}`);
     };
   };
 
-  $: filter_by(filter_str);
+  $: filter_by($filterstr);
 </script>
 
-<svelte:component this={SubMenu} bind:filterstr={filter_str}
-                  topics={all_top}/>
+<svelte:component this={SubMenu} topics={all_top}/>
 {#each cat_filter as cat}
   {#if categories.has(cat) && categories.get(cat).length > 0}
     <svelte:component this={Category}
                       name="{cat[0].toUpperCase() + cat.substr(1)} Area"
-                      type={cat} data={categories.get(cat)}
-                      bind:filterstr={filter_str} />
+                      type={cat} data={categories.get(cat)} />
   {/if}
 {/each}
 {#each top_filter as topic}
   {#if topics.has(topic) && topics.get(topic).length > 0}
     <svelte:component this={Category}
                       name="{topic} Topic"
-                      type={topic} data={topics.get(topic)}
-                      bind:filterstr={filter_str} />
+                      type={topic} data={topics.get(topic)} />
   {/if}
 {/each}
