@@ -72,18 +72,19 @@
     obj.topics.forEach(element => {
       all_top.add(element);
       if (filt.includes(element)) {
+        // top_filter.add(element);
         if (topics.has(element)) {
           topics.get(element).push(obj);
         } else {
           topics.set(element, [obj]);
         }
         // include all related categories
-        all_cat.add(obj.object);
-        if (inc && !cat_filter.has(obj.object)) {
+        if (inc) {
           cat_filter.add(obj.object);
         }
       }
     });
+    all_cat.add(obj.object);
   }
 
   const filter_by = (fstr) => {
@@ -111,6 +112,7 @@
                               .forEach(e =>
                                 filter_cat([fstr, ...cat_filter], e, false)
                               );
+          top_filter.clear();
         }
       };
 
