@@ -187,9 +187,9 @@
 
 </script>
 
-<svelte:component this={SubMenu} topics={[...all_top]}/>
-{#each [...cat_filter].sort() as cat}
-  {#if categories.has(cat) && categories.get(cat).length > 0}
+<svelte:component this={SubMenu} topics={[...all_top].sort()}/>
+{#each ["consume", "event", "concept", "detail", "history"] as cat}
+  {#if cat_filter.has(cat) && categories.get(cat).length > 0}
     <svelte:component this={Category}
                       name="{cat[0].toUpperCase() + cat.substr(1)} Area"
                       type={cat} data={categories.get(cat)} />
