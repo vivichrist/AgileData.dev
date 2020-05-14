@@ -96,6 +96,7 @@
       if (fstr === "topics") { // All topics
         data.forEach(e => filter_not(e));
         top_filter = all_top;
+        cat_filter.clear();
       } else { // One Area or One Topic
         let regex = /history|event|concept|consume|detail/g;
         if (regex.test(fstr)) {
@@ -114,11 +115,9 @@
       };
 
     } else if (Array.isArray(f)) { // should be an array of strings
-      beforeUpdate(() => {
-        data.forEach(e => filter_exclude(fstr, e))
-      });
-      cat_filter = new Set(categories.keys());
-      top_filter = new Set(topics.keys());
+      data.forEach(e => filter_exclude(fstr, e));
+      // cat_filter = new Set(categories.keys());
+      // top_filter = new Set(topics.keys());
       console.log(`filter with: ${fstr}`);
     };
   };

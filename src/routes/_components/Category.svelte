@@ -25,8 +25,8 @@
 
 <svelte:window on:resize={handleWidth} on:load={handleWidth}/>
 
-<div class="d-inline-flex flex-row flex-fill justify-content-start"
-     style="width: calc({Math.min(data.length, rng) * 225}px + 2rem);">
+<div class="d-flex flex-row flex-fill justify-content-start">
+     <!-- style="width: calc({Math.min(data.length, rng) * 225}px + 2rem);"> -->
   <div id="{type}Captions" class="carousel slide flex-fill justify-content-start"
        data-interval="false">
     <a href="app/catalog?filter=type">
@@ -77,7 +77,7 @@
     color: black;
   }
   .carousel {
-    width: 100vw;
+    width: 80vw;
     height: 18rem;
     margin-right: 3rem;
     margin-left: 3rem;
