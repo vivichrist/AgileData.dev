@@ -1,5 +1,5 @@
 <script>
-  import { popup, filterstr } from '../../stores.js'
+  import { popup } from '../../stores.js'
   import CatCard from './CatCard.svelte';
 
   export let data = [];
@@ -29,7 +29,7 @@
      style="width: calc({Math.min(data.length, rng) * 225}px + 2rem);">
   <div id="{type}Captions" class="carousel slide flex-fill justify-content-start"
        data-interval="false">
-    <a href="app/catalog" on:click={() => $filterstr=type}>
+    <a href="app/catalog?filter=type">
       <span class="title text-left font-weight-bold mb-3 pb-0" >
         {name}
       </span>

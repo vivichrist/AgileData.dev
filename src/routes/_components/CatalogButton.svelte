@@ -4,8 +4,7 @@
 </script>
 
 <button type="button" class="nav-link btn btn-primary py-3 m-0"
-   on:click={() => $filterstr = "reset"}
-   href="app/catalog" in transition:fly="{{y: -100, duration: 500}}">
+   href="app/catalog?filter=reset" in transition:fly="{{y: -100, duration: 500}}">
   Catalog
 </button>
 

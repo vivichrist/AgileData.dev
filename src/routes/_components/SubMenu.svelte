@@ -12,8 +12,7 @@
     </div>
     <div class="dropdown-menu" aria-labelledby="subMenuAllTopics">
     {#each topics as item}
-      <a class="dropdown-item" on:click={() => $filterstr = item}
-        href="app/catalog">{item}</a>
+      <a class="dropdown-item" href="app/catalog?filter={item}">{item}</a>
     {:else}
       <div class="spinner-grow text-primary" role="status">
         <span class="sr-only">Loading...</span>
@@ -23,33 +22,27 @@
   </li>
   <li class="nav-item">
     <a role="button" class="nav-link under-dark"
-        on:click={() => $filterstr = "topics"}
-        href="app/catalog">Topics</a>
+        href="app/catalog?filter=topics">Topics</a>
   </li>
   <li class="nav-item">
     <a role="button" class="nav-link under-dark"
-        on:click={() => $filterstr = "consume"}
-        href="app/catalog">Consume</a>
+        href="app/catalog?filter=consume">Consume</a>
   </li>
   <li class="nav-item">
     <a role="button" class="nav-link under-dark"
-        on:click={() => $filterstr = "event"}
-        href="app/catalog">Events</a>
+        href="app/catalog?filter=event">Events</a>
   </li>
   <li class="nav-item">
     <a role="button" class="nav-link under-dark"
-        on:click={() => $filterstr = "concept"}
-        href="app/catalog">Concepts</a>
+        href="app/catalog?filter=concept">Concepts</a>
   </li>
   <li class="nav-item">
     <a role="button" class="nav-link under-dark"
-        on:click={() => $filterstr = "detail"}
-        href="app/catalog">Details</a>
+        href="app/catalog?filter=detail">Details</a>
   </li>
   <li class="nav-item">
     <a role="button" class="nav-link under-dark"
-        on:click={() => $filterstr = "history"}
-        href="app/catalog">History</a>
+        href="app/catalog?filter=history">History</a>
   </li>
   <li class="nav-item">
     <a role="button" class="nav-link under-dark"
@@ -61,7 +54,6 @@
   </li>
   <li class="nav-item">
     <a role="button" class="nav-link under-dark"
-        on:click={() => $filterstr = "reset"}
         href="app/catalog">My Lists</a>
   </li>
 </ul>

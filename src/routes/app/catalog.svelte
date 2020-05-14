@@ -3,7 +3,131 @@
   let topics = new Map();
   let data = [];
 
-  export async function preload(page, session) {
+  let cat_filter = new Set();
+  let top_filter = new Set();
+  let all_cat = new Set();
+  let all_top = new Set();
+
+  // const compareKV = (a, b) => {
+  //   return topics.get(a).length - topics.get(b).length;
+  // }
+
+  const filter_not = (obj) => {
+    all_cat.add(obj.object)
+    if (categories.has(obj.object)) {
+      categories.get(obj.object).push(obj);
+    } else {
+      categories.set(obj.object, [obj]);
+    };
+    obj.topics.forEach(element => {
+      all_top.add(element);
+      if (topics.has(element)) {
+        topics.get(element).push(obj);
+      } else {
+        topics.set(element, [obj]);
+      };
+    });
+  };
+
+  const filter_exclude = (filt, obj) => {
+    all_cat.add(obj.object)
+    if (filt.includes(obj.object)) {
+      if (categories.has(obj.object)) {
+        categories.get(obj.object).push(obj);
+      } else {
+        categories.set(obj.object, [obj]);
+      };
+    };
+    obj.topics.forEach(element => {
+      all_top.add(element);
+      if (filt.includes(element)) {
+        if (topics.has(element)) {
+          topics.get(element).push(obj);
+        } else {
+          topics.set(element, [obj]);
+        };
+      };
+    });
+  };
+
+  const filter_cat = (filt, obj, inc) => {
+
+    all_cat.add(obj.object)
+    if (filt.includes(obj.object)) {
+      cat_filter.add(obj.object)
+      if (categories.has(obj.object)) {
+        categories.get(obj.object).push(obj);
+      } else {
+        categories.set(obj.object, [obj]);
+      };
+      // include all related topics
+      if (inc) obj.topics.forEach(element => {
+        all_top.add(element);
+        top_filter.add(element);
+      });
+    };
+  }
+
+  const filter_top = (filt, obj, inc) => {
+    obj.topics.forEach(element => {
+      all_top.add(element);
+      if (filt.includes(element)) {
+        if (topics.has(element)) {
+          topics.get(element).push(obj);
+        } else {
+          topics.set(element, [obj]);
+        }
+        // include all related categories
+        all_cat.add(obj.object);
+        if (inc && !cat_filter.has(obj.object)) {
+          cat_filter.add(obj.object);
+        }
+      }
+    });
+  }
+
+  const filter_by = (fstr) => {
+
+    if (fstr.length === 0) {
+      data.forEach(e => filter_not(e));
+      top_filter = all_top;
+      cat_filter = all_cat;
+    } else if (typeof(fstr) === "string") {
+      if (fstr === "topics") { // All topics
+        data.forEach(e => filter_not(e));
+        top_filter = all_top;
+      } else { // One Area or One Topic
+        let regex = /history|event|concept|consume|detail/g;
+        if (regex.test(fstr)) {
+          data.forEach(e => filter_cat([fstr], e, true));
+          [...categories.values()].flat(2)
+                                  .forEach(e =>
+                                    filter_top([fstr, ...top_filter], e, false)
+                                  );
+        } else {
+          data.forEach(e => filter_top([fstr], e, true));
+          [...topics.values()].flat(2)
+                              .forEach(e =>
+                                filter_cat([fstr, ...cat_filter], e, false)
+                              );
+        }
+      };
+
+    } else if (Array.isArray(f)) { // should be an array of strings
+      beforeUpdate(() => {
+        data.forEach(e => filter_exclude(fstr, e))
+      });
+      cat_filter = new Set(categories.keys());
+      top_filter = new Set(topics.keys());
+      console.log(`filter with: ${fstr}`);
+    };
+  };
+
+  export async function preload(page) {
+
+    let filterstr = page.query.filter || "";
+    // let incl = page.query.inc || false;
+
     await this.fetch(
       'https://agiledata-core-prd.appspot.com/tables/?apikey=977609nhgfty86HJKhjkl78')
       .then(res => {
@@ -19,38 +143,38 @@
           } else {obj[key].sort();}
         }
         return obj;
-      }));
-    await data.forEach(obj => {
-      if (categories.has(obj.object)) {
-        categories.get(obj.object).push(obj);
-      } else {
-        categories.set(obj.object, [obj]);
-      };
-      obj.topics.forEach(element => {
-        if (topics.has(element)) {
-          topics.get(element).push(obj);
-        } else {
-          topics.set(element, [obj]);
-        };
-      });
-    });
+      })
+    );
+    cat_filter.clear();
+    top_filter.clear();
+    categories.clear();
+    topics.clear();
+
+    filter_by(filterstr);
+    return { filterstr, cat_filter ,top_filter, all_top, categories, topics };
   };
 
 </script>
 
 <script>
   import { beforeUpdate, onMount, onDestroy } from 'svelte';
-  import { popup, filterstr } from "../../stores.js";
-  const all_cat = [...categories.keys()];
-  const all_top = [...topics.keys()];
+  import { popup } from "../../stores.js";
+  export let filterstr;
+  export let cat_filter;
+  export let top_filter;
+  export let all_top;
+  export let categories;
+  export let topics;
+
+  console.log(`filter by: ${filterstr}`);
 
   let Category;
   let SubMenu;
   onMount(async () => {
+    const module = await import( "../_components/SubMenu.svelte");
+    SubMenu = module.default;
     const module1 = await import('../_components/Category.svelte');
-    const module2 = await import( "../_components/SubMenu.svelte");
     Category = module1.default;
-    SubMenu = module2.default;
 
     window.hidePopups = () => {
       let p = $popup;
@@ -60,160 +184,17 @@
     window.$('[data-toggle="popover"]').popover({ container: 'body' });
   });
 
-  onDestroy(() => {
-    categories.clear();
-    topics.clear();
-    data.length = 0;
-  });
-
-  let cat_filter = [...categories.keys()];
-  let top_filter = [...topics.keys()].sort();
-
-  const init_maps = (obj) => {
-    if (categories.has(obj.object)) {
-      categories.get(obj.object).push(obj);
-    } else {
-      categories.set(obj.object, [obj]);
-    };
-    obj.topics.forEach(element => {
-      if (topics.has(element)) {
-        topics.get(element).push(obj);
-      } else {
-        topics.set(element, [obj]);
-      };
-    });
-  };
-
-  const reset_maps = () => {
-    categories.clear();
-    topics.clear();
-  }
-
-  const compareKV = (a, b) => {
-    return topics.get(a).length - topics.get(b).length;
-  }
-
-  const refilter_exclusive = (obj) => {
-    if (cat_filter.find(e => e === obj.object)) {
-      if (categories.has(obj.object)) {
-        categories.get(obj.object).push(obj);
-      } else {
-        categories.set(obj.object, [obj]);
-      };
-    };
-    obj.topics.forEach(element => {
-      if (top_filter.find(e => e === element)) {
-        if (topics.has(element)) {
-          topics.get(element).push(obj);
-        } else {
-          topics.set(element, [obj]);
-        };
-      };
-    });
-  };
-
-  const refilter_cat = (obj, inc) => {
-    if (cat_filter.find(e => e === obj.object)) {
-      if (categories.has(obj.object)) {
-        categories.get(obj.object).push(obj);
-      } else {
-        categories.set(obj.object, [obj]);
-      };
-      if (inc) obj.topics.forEach(element => {
-        if (!top_filter.includes(element)) {
-          top_filter = [element, ...top_filter];
-        }
-      });
-    };
-  }
-
-  const refilter_top = (obj,inc) => {
-    obj.topics.forEach(element => {
-      if (top_filter.find(e => e === element)) {
-        if (topics.has(element)) {
-          topics.get(element).push(obj);
-        } else {
-          topics.set(element, [obj]);
-        }
-        if (inc && !cat_filter.includes(obj.object)) {
-          cat_filter = [obj.object, ...cat_filter];
-        }
-      }
-    });
-  }
-
-  const filter_by = (fstr) => {
-
-    if (fstr.length === 0) fstr = "reset";
-
-    if (typeof(fstr) === "string") {
-      if (fstr === "reset") { // Everything
-        reset_maps();
-        data.forEach(e => init_maps(e));
-        beforeUpdate(() => {
-          cat_filter = all_cat;
-          top_filter = all_top;
-          top_filter.sort();
-        });
-      } else if (fstr === "topics") { // All topics
-        reset_maps();
-        data.forEach(e => init_maps(e));
-        beforeUpdate(() => {
-          cat_filter = [];
-          top_filter = all_top;
-          top_filter.sort();
-        });
-      } else { // One Area or One Topic
-        if (all_cat.some(e => e === fstr)) {
-          top_filter = [];
-          cat_filter = [fstr];
-          reset_maps();
-          data.forEach(e => refilter_cat(e, true));
-          [...categories.values()].forEach(arr =>
-            arr.forEach(e => refilter_top(e, false))
-          );
-          // beforeUpdate(() => {
-          // });
-        } else {
-          cat_filter = [];
-          top_filter = [fstr];
-          reset_maps();
-          data.forEach(e => refilter_top(e, true));
-          [...topics.values()].forEach(arr =>
-            arr.forEach(e => refilter_cat(e, false))
-          );
-          // beforeUpdate(() => {
-          // });
-        }
-      };
-      console.log(`filter by: ${fstr}`);
-    } else if (Array.isArray(f)) { // should be an array of strings
-      cat_filter.length = 0;
-      top_filter.length = 0;
-      for (const e of fstr) {
-        if (all_cat.includes(e)) cat_filter = [e, ...cat_filter];
-        if (all_top.includes(e)) top_filter = [e, ...top_filter];
-      }
-      beforeUpdate(() => {
-        reset_maps();
-        data.forEach(e => refilter_exclusive(e));
-      });
-      console.log(`filter with: ${fstr}`);
-    };
-  };
-
-  $: filter_by($filterstr);
 </script>
 
-<svelte:component this={SubMenu} topics={all_top}/>
-{#each cat_filter as cat}
+<svelte:component this={SubMenu} topics={[...all_top]}/>
+{#each [...cat_filter].sort() as cat}
   {#if categories.has(cat) && categories.get(cat).length > 0}
     <svelte:component this={Category}
                       name="{cat[0].toUpperCase() + cat.substr(1)} Area"
                       type={cat} data={categories.get(cat)} />
   {/if}
 {/each}
-{#each top_filter as topic}
+{#each [...top_filter].sort() as topic}
   {#if topics.has(topic) && topics.get(topic).length > 0}
     <svelte:component this={Category}
                       name="{topic} Topic"
