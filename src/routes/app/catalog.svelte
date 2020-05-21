@@ -92,9 +92,7 @@
 
     if (typeof(fstr) === "string") {
       if (fstr === "0") {
-        data.forEach(e => filter_not(e));
-        console.log(all_top);
-        console.log(all_cat);
+        data.forEach(e => filter_not(e)); 
         top_filter = all_top;
         cat_filter = all_cat;
       } else if (fstr === "topics") { // All topics
