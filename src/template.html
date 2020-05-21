@@ -10,7 +10,7 @@
 	<link rel='manifest' href='manifest.json' crossorigin='use-credentials'>
 	<link rel='icon' type='image/svg' href='/agiledata-logo-icon-purple-dropdown.svg'/>
 
-  <style>
+	<style>
 		@font-face { font-family: Nunito; src: url('/fonts/Nunito-Regular.ttf'); }
 		@font-face { font-family: Nunito; font-weight: bold; src: url('/fonts/Nunito-Bold.ttf');}
 		@font-face { font-family: Nunito; font-weight: extra-bold; src: url('/fonts/Nunito-ExtraBold.ttf');}
@@ -18,7 +18,6 @@
 		@font-face { font-family: Nunito; font-weight: semi-bold; src: url('/fonts/Nunito-SemiBold.ttf');}
 	</style>
 
-	<!-- <script src="https://apis.google.com/js/api:client.js" async defer></script> -->
 	<script async defer>
 
 		window.onSignIn = (user) => {
@@ -97,6 +96,6 @@
 	     and anything else it needs to hydrate the app and
 	     initialise the router -->
   %sapper.scripts%
-
+  <script src="https://apis.google.com/js/api:client.js" async defer></script>
 </body>
 </html>

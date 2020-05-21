@@ -69,6 +69,7 @@
   }
 
   const filter_top = (filt, obj, inc) => {
+
     obj.topics.forEach(element => {
       all_top.add(element);
       if (filt.includes(element)) {
@@ -89,15 +90,17 @@
 
   const filter_by = (fstr) => {
 
-    if (fstr.length === 0) {
-      data.forEach(e => filter_not(e));
-      top_filter = all_top;
-      cat_filter = all_cat;
-    } else if (typeof(fstr) === "string") {
-      if (fstr === "topics") { // All topics
+    if (typeof(fstr) === "string") {
+      if (fstr === "0") {
+        data.forEach(e => filter_not(e));
+        console.log(all_top);
+        console.log(all_cat);
+        top_filter = all_top;
+        cat_filter = all_cat;
+      } else if (fstr === "topics") { // All topics
         data.forEach(e => filter_not(e));
         top_filter = all_top;
-        cat_filter.clear();
+        cat_filter = new Set();
       } else { // One Area or One Topic
         let regex = /history|event|concept|consume|detail/g;
         if (regex.test(fstr)) {
@@ -105,14 +108,14 @@
           [...categories.values()].flat(2)
                                   .forEach(e =>
                                     filter_top([fstr, ...top_filter], e, false)
-                                  );
+                                  ); 
         } else {
           data.forEach(e => filter_top([fstr], e, true));
           [...topics.values()].flat(2)
                               .forEach(e =>
                                 filter_cat([fstr, ...cat_filter], e, false)
                               );
-          top_filter.clear();
+          top_filter = new Set();
         }
       };
 
@@ -126,7 +129,7 @@
 
   export async function preload(page) {
 
-    let filterstr = page.query.filter || "";
+    let filterstr = page.query.filter || "0";
     // let incl = page.query.inc || false;
 
     await this.fetch(
@@ -189,14 +192,14 @@
 
 <svelte:component this={SubMenu} topics={[...all_top].sort()}/>
 {#each ["consume", "event", "concept", "detail", "history"] as cat}
-  {#if cat_filter.has(cat) && categories.get(cat).length > 0}
+  {#if cat_filter.has(cat) && categories.has(cat)}
     <svelte:component this={Category}
                       name="{cat[0].toUpperCase() + cat.substr(1)} Area"
                       type={cat} data={categories.get(cat)} />
   {/if}
 {/each}
 {#each [...top_filter].sort() as topic}
-  {#if topics.has(topic) && topics.get(topic).length > 0}
+  {#if topics.has(topic)}
     <svelte:component this={Category}
                       name="{topic} Topic"
                       type={topic} data={topics.get(topic)} />
