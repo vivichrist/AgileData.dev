@@ -1,8 +1,10 @@
 <script context="module">
 
   let data = [];
-  export async function preload(page, session) {
-    await this.fetch('https://agiledata-core-prd.appspot.com/rules/?apikey=977609nhgfty86HJKhjkl78')
+  export async function preload(page) {
+    await this.fetch('https://demo.agiledata.io/rules?apikey=977609nhgfty86HJKhjkl78', {
+        credentials: "include"
+      })
       .then(res => {
         if (!res.ok) {
           throw new Error('Network response for rules table was not ok');

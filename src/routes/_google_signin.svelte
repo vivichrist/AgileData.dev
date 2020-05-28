@@ -1,5 +1,21 @@
 <script>
+  if (process.browser) {
+    window.onSignIn = (user) => {
+      // Useful data for your client-side scripts:
+      const profile = user.getBasicProfile();
+      // The ID token you need to pass to your backend:
+      sessionStorage.id = profile.getId();
+      sessionStorage.name = profile.getName();
+      sessionStorage.given_name = profile.getGivenName();
+      sessionStorage.family_name = profile.getFamilyName();
+      sessionStorage.img_url = profile.getImageUrl();
+      sessionStorage.email = profile.getEmail();
+      sessionStorage.token = user.getAuthResponse().id_token;
 
+      document.getElementById("SignInWrapper").style.display = "none";
+      console.log("onsign-in");
+    };
+  }
 </script>
 
 <!-- <div class="g-signin2" data-longtitle="true" data-onsuccess="onSignIn" /> -->
@@ -27,7 +43,6 @@
   #customBtn {
     color: var(--ternary);
     background-color: white;
-    background-blend-mode: color-burn;
     margin-top: 2vh;
     width: 10em;
   }

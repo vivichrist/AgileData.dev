@@ -1,101 +1,109 @@
-<!doctype html>
-<html lang='en'>
-<head>
-	<meta charset='utf-8'>
-	<meta name='viewport' content='width=device-width,initial-scale=1.0'>
-	<meta name='theme-color' content='#333333'>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <meta name="theme-color" content="#333333" />
 
-	%sapper.base%
+    %sapper.base%
 
-	<link rel='manifest' href='manifest.json' crossorigin='use-credentials'>
-	<link rel='icon' type='image/svg' href='/agiledata-logo-icon-purple-dropdown.svg'/>
+    <link rel="manifest" href="manifest.json" crossorigin="use-credentials" />
+    <link
+      rel="icon"
+      type="image/svg"
+      href="/agiledata-logo-icon-purple-dropdown.svg"
+    />
 
-	<style>
-		@font-face { font-family: Nunito; src: url('/fonts/Nunito-Regular.ttf'); }
-		@font-face { font-family: Nunito; font-weight: bold; src: url('/fonts/Nunito-Bold.ttf');}
-		@font-face { font-family: Nunito; font-weight: extra-bold; src: url('/fonts/Nunito-ExtraBold.ttf');}
-		@font-face { font-family: Nunito; font-weight: extra-light; src: url('/fonts/Nunito-ExtraLight.ttf');}
-		@font-face { font-family: Nunito; font-weight: semi-bold; src: url('/fonts/Nunito-SemiBold.ttf');}
-	</style>
+    <style>
+      @font-face {
+        font-family: Nunito;
+        src: url("/fonts/Nunito-Regular.ttf");
+      }
+      @font-face {
+        font-family: Nunito;
+        font-weight: bold;
+        src: url("/fonts/Nunito-Bold.ttf");
+      }
+      @font-face {
+        font-family: Nunito;
+        font-weight: extra-bold;
+        src: url("/fonts/Nunito-ExtraBold.ttf");
+      }
+      @font-face {
+        font-family: Nunito;
+        font-weight: extra-light;
+        src: url("/fonts/Nunito-ExtraLight.ttf");
+      }
+      @font-face {
+        font-family: Nunito;
+        font-weight: semi-bold;
+        src: url("/fonts/Nunito-SemiBold.ttf");
+      }
+    </style>
 
-	<script async defer>
+    <script async defer>
+      window.signOut = () => {
+        const auth2 = gapi.auth2.getAuthInstance();
+        auth2.signOut().then(() => {
+          sessionStorage.removeItem("id");
+          sessionStorage.removeItem("name");
+          sessionStorage.removeItem("given_name");
+          sessionStorage.removeItem("family_name");
+          sessionStorage.removeItem("img_url");
+          sessionStorage.removeItem("email");
+          sessionStorage.removeItem("token");
 
-		window.onSignIn = (user) => {
-      // Useful data for your client-side scripts:
-      const profile = user.getBasicProfile();
-      // The ID token you need to pass to your backend:
-      sessionStorage.id = profile.getId();
-      sessionStorage.name = profile.getName();
-      sessionStorage.given_name = profile.getGivenName();
-      sessionStorage.family_name = profile.getFamilyName();
-      sessionStorage.img_url = profile.getImageUrl();
-      sessionStorage.email = profile.getEmail();
-      sessionStorage.token = user.getAuthResponse().id_token;
-
-      document.getElementById("SignInWrapper").style.display = "none";
-      console.log("onsign-in");
-		}
-		window.signOut = () => {
-      const auth2 = gapi.auth2.getAuthInstance();
-      auth2.signOut().then(() => {
-        sessionStorage.removeItem("id");
-        sessionStorage.removeItem("name");
-        sessionStorage.removeItem("given_name");
-        sessionStorage.removeItem("family_name");
-        sessionStorage.removeItem("img_url");
-        sessionStorage.removeItem("email");
-        sessionStorage.removeItem("token");
-
-        document.getElementById("SignInWrapper").style.display = "block";
-        console.log("onsign-out");
-      });
-    }
-		window.startApp = function() {
-      gapi.load('auth2', function(){
-        // Retrieve the singleton for the GoogleAuth library and set up the client.
-        let auth2 = gapi.auth2.init({
-          client_id: '461979086851-bbjhehqb9qpn3boroii8l4klmcc718bd.apps.googleusercontent.com',
-          cookiepolicy: 'single_host_origin',
-          scope: 'profile email',
+          document.getElementById("SignInWrapper").style.display = "block";
+          console.log("onsign-out");
         });
-        let element = document.getElementById('customBtn');
-        auth2.attachClickHandler(element, {},
-          function(user) {
-            onSignIn(user);
-          }, function(error) {
-            alert(JSON.stringify(error, undefined, 2));
-          }
-        );
-      });
-    };
-
-	</script>
-	<!-- Sapper generates a <style> tag containing critical CSS
+      };
+      window.startApp = function () {
+        gapi.load("auth2", function () {
+          // Retrieve the singleton for the GoogleAuth library and set up the client.
+          let auth2 = gapi.auth2.init({
+            client_id:
+              "865193817161-j3sjhd6d09488ih4lnnijhqvdsvud2pq.apps.googleusercontent.com",
+            cookiepolicy: "single_host_origin",
+            scope: "profile email",
+          });
+          let element = document.getElementById("customBtn");
+          auth2.attachClickHandler(
+            element,
+            {},
+            function (user) {
+              onSignIn(user);
+            },
+            function (error) {
+              alert(JSON.stringify(error, undefined, 2));
+            }
+          );
+        });
+      };
+    </script>
+    <!-- Sapper generates a <style> tag containing critical CSS
 	     for the current page. CSS for the rest of the app is
 	     lazily loaded when it precaches secondary pages -->
-	%sapper.styles%
+    %sapper.styles%
 
-	<link rel='stylesheet' href='/css/custom.css'>
-	<!-- This contains the contents of the <svelte:head> component, if
+    <link rel="stylesheet" href="/css/custom.css" />
+    <!-- This contains the contents of the <svelte:head> component, if
 	     the current page has one -->
-	%sapper.head%
-	<link rel="stylesheet" href="/fontawesome/css/all.min.css" defer>
-	<script src="/jquery-slim/dist/jquery.slim.min.js" defer>
-	</script>
-	<script src="/bootstrap/dist/js/bootstrap.bundle.min.js" defer>
-	</script>
-</head>
-<body onload='startApp'>
-	<!-- The application will be rendered inside this element,
+    %sapper.head%
+    <link rel="stylesheet" href="/fontawesome/css/all.min.css" defer />
+    <script src="/jquery-slim/dist/jquery.slim.min.js" defer></script>
+    <script src="/bootstrap/dist/js/bootstrap.bundle.min.js" defer></script>
+  </head>
+  <body onload="startApp">
+    <!-- The application will be rendered inside this element,
 	     because `src/client.js` references it -->
-	<div id='sapper'>
-		%sapper.html%
-	</div>
+    <div id="sapper">
+      %sapper.html%
+    </div>
 
-	<!-- Sapper creates a <script> tag containing `src/client.js`
+    <!-- Sapper creates a <script> tag containing `src/client.js`
 	     and anything else it needs to hydrate the app and
 	     initialise the router -->
-  %sapper.scripts%
-  <script src="https://apis.google.com/js/api:client.js" async defer></script>
-</body>
+    %sapper.scripts%
+    <script src="https://apis.google.com/js/api:client.js" async defer></script>
+  </body>
 </html>

@@ -5,6 +5,8 @@
   export let item = {};
   export let handlePopup = undefined;
 
+  item.alias = item.alias || "No Title";
+
   const detailsPage = () => {
     $pageseg = item;
     goto('app/catalog-details')

@@ -6,6 +6,8 @@
   export let name = "Missing Category";
   export let type = "NoCategory";
 
+  type = type.trim();
+
   let rng = Math.floor(window.innerWidth / 235);
 
   $: limit = Math.ceil(data.length / rng);

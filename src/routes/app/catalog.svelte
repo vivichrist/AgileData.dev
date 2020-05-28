@@ -2,7 +2,6 @@
   let categories = new Map();
   let topics = new Map();
   let data = [];
-
   let cat_filter = new Set();
   let top_filter = new Set();
   let all_cat = new Set();
@@ -129,24 +128,23 @@
 
     let filterstr = page.query.filter || "0";
     // let incl = page.query.inc || false;
-
-    await this.fetch(
-      'https://agiledata-core-prd.appspot.com/tables/?apikey=977609nhgfty86HJKhjkl78')
-      .then(res => {
-        if (!res.ok) {
-          throw new Error('Network response for Catagory views has failed');
-        }
-        return res.json()
-      })
-      .then(jsn => data = jsn.map(obj => {
-        for (let key in obj) {
-          if (!Array.isArray(obj[key])) {
-            obj[key] = obj[key].replace(/[_.]/g, ' '); // remove underscores and dot
-          } else {obj[key].sort();}
-        }
-        return obj;
-      })
-    );
+    if (process.browser) {
+      await this.fetch(
+        'https://demo.agiledata.io/combined_catalog/?apikey=977609nhgfty86HJKhjkl78', {
+          credentials: "include"
+        })
+        .then(res => {
+          if (!res.ok) {
+            throw new Error('Network response for Catagory views has failed');
+          }
+          return res.json()
+        })
+        .then(jsn => data = jsn.map(obj => {
+          obj.topics.sort();
+          return obj;
+        })
+      );
+    };
     cat_filter.clear();
     top_filter.clear();
     categories.clear();
