@@ -2,21 +2,25 @@
 
   let data = [];
   export async function preload(page) {
-    await this.fetch('https://demo.agiledata.io/rules?apikey=977609nhgfty86HJKhjkl78', {
-        credentials: "include"
-      })
-      .then(res => {
-        if (!res.ok) {
-          throw new Error('Network response for rules table was not ok');
-        }
-        return res.json()
-      })
-      .then(jsn => data = jsn.map(obj => {
-        for (let key in obj) {
-          obj[key] = obj[key].replace(/_/g, ' '); // remove underscores
-        }
-        return obj;
-      }));
+    if (process.browser) {
+      await this.fetch('https://demo.agiledata.io/rules?apikey=977609nhgfty86HJKhjkl78', {
+          credentials: "include"
+        })
+        .then(res => {
+          if (!res.ok) {
+            throw new Error('Network response for rules table was not ok');
+          }
+          return res.json()
+        })
+        .then(jsn => data = jsn.map(obj => {
+          for (let key in obj) {
+            if (obj[key]) {
+              obj[key] = obj[key].replace(/_/g, ' '); // remove underscores
+            } else {obj[key] = ""};
+          }
+          return obj;
+        }));
+    }
     return undefined;
   }
 </script>
@@ -29,22 +33,21 @@
   export let pos = 1; // which page to view
   // list of sorting directions
   let sorting = 2;
-  let column = "Dataset";
+  let column = "Rule_Name";
   // list of filter strings, empty string means no filter
   let ftype = {
-    Dataset:"",
-    Identifier:"",
-    Project:"",
-    Rule_Attributes: "",
     Rule_Name: "",
-    Rule_Order: "",
-    Rule_Type: "",
+    Source_Object: "",
+    Source_Type: "",
+    Target_Object: "",
+    Target_Type: "",
+    Primary_Key_Alias: "",
   };
 
   // filter the data according to the associated input boxes
   $: fdata = data.filter(d => { // data filtered from all the data
       return Object.entries(ftype).every( t => {
-        return d[t[0]].search(t[1]) >= 0;
+        return d[t[0].toLowerCase()].search(t[1]) >= 0;
       });
     });
   // how many pages of items in total.
@@ -101,7 +104,7 @@
     {#each dataseg as seg}
       <tr>
       {#each [...Object.keys(ftype)] as name}
-        <th class="text-truncate rows">{seg[name]}</th>
+        <th class="text-truncate rows">{seg[name.toLowerCase()]}</th>
       {/each}
       </tr>
     {/each}

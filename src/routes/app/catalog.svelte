@@ -130,7 +130,7 @@
     // let incl = page.query.inc || false;
     if (process.browser) {
       await this.fetch(
-        'https://demo.agiledata.io/combined_catalog/?apikey=977609nhgfty86HJKhjkl78', {
+        'https://demo.agiledata.io/combined_catalog?apikey=977609nhgfty86HJKhjkl78', {
           credentials: "include"
         })
         .then(res => {
