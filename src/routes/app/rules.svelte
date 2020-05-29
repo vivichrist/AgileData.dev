@@ -34,6 +34,7 @@
   // list of sorting directions
   let sorting = 2;
   let column = "Rule_Name";
+
   // list of filter strings, empty string means no filter
   let ftype = {
     Rule_Name: "",
@@ -61,12 +62,13 @@
 
   const sortByColumn = (col) => {
     if (column === col) {
-      sorting = sorting ? 0 : 1;
+      sorting = sorting ? 0 : 1; // flip sorting order
     } else {
-      column = col;
+      column = col; // start with ascending sort.
       sorting = 0;
     }
     if (sorting < 2) {
+      let c = col.toLowerCase();
       data.sort( function(a, b) {
         let x = a[col].toLowerCase();
         let y = b[col].toLowerCase();
@@ -76,7 +78,7 @@
       });
       fdata = data.filter( d => {
         return Object.entries(ftype).every( t => {
-          return d[t[0]].search(t[1]) >= 0;
+          return d[t[0].toLowerCase()].search(t[1]) >= 0;
         });
       });
       dataseg = fdata.slice(startrng, endrng);
