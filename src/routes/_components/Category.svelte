@@ -99,11 +99,11 @@
     margin-bottom: 0;
   }
   .carousel-control-prev {
-    left: -3%;
+    left: -4%;
     width: 3rem;
   }
   .carousel-control-next {
-    right: -3%;
+    right: -4%;
     width: 3rem;
   }
 </style>

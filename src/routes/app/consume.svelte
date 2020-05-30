@@ -3,19 +3,23 @@
   let data = [];
   export async function preload(page) {
     if (process.browser) {
-      await this.fetch('https://demo.agiledata.io/rules?apikey=977609nhgfty86HJKhjkl78', {
+      await this.fetch('https://demo.agiledata.io/events_catalog?apikey=977609nhgfty86HJKhjkl78', {
           credentials: "include"
         })
         .then(res => {
           if (!res.ok) {
-            throw new Error('Network response for rules table was not ok');
+            throw new Error('Network response for Consume table was not ok');
           }
           return res.json()
         })
         .then(jsn => data = jsn.map(obj => {
           for (let key in obj) {
             if (obj[key]) {
-              obj[key] = obj[key].replace(/_/g, ' '); // remove underscores
+              if (typeof(obj[key]) === 'string') {
+                obj[key] = obj[key].replace(/_/g, ' '); // remove underscores
+              } else if (Array.isArray(obj[key])) {
+                obj[key] = obj[key].join(' ');
+              } else {obj[key] = `${obj[key]}`};
             } else {obj[key] = ""};
           }
           return obj;
@@ -33,16 +37,17 @@
   export let pos = 1; // which page to view
   // list of sorting directions
   let sorting = 2;
-  let column = "Rule_Name";
+  let column = "Alias";
 
   // list of filter strings, empty string means no filter
   let ftype = {
-    Rule_Name: "",
-    Source_Object: "",
-    Source_Type: "",
-    Target_Object: "",
-    Target_Type: "",
-    Primary_Key_Alias: "",
+    Alias: "",
+    Table_Name: "",
+    Object: "",
+    Description: "",
+    Topics: "",
+    Row_Count: "",
+    Last_Refreshed: ""
   };
 
   // filter the data according to the associated input boxes
@@ -70,10 +75,17 @@
     if (sorting < 2) {
       let c = col.toLowerCase();
       data.sort( function(a, b) {
-        let x = a[c].toLowerCase();
-        let y = b[c].toLowerCase();
-        if (x < y) {return sorting === 0 ? -1 : 1;}
-        if (x > y) {return sorting === 0  ? 1 : -1;}
+        if (col === "Row_Count") {
+          let x = parseInt(a[c], 10);
+          let y = parseInt(b[c], 10);
+          if (x < y) {return sorting === 0 ? -1 : 1;};
+          if (x > y) {return sorting === 0 ?  1 :-1;};
+        } else {
+          let x = a[c].toLowerCase();
+          let y = b[c].toLowerCase();
+          if (x < y) {return sorting === 0 ? -1 : 1;};
+          if (x > y) {return sorting === 0 ?  1 :-1;};
+        }
         return 0;
       });
       fdata = data.filter( d => {
