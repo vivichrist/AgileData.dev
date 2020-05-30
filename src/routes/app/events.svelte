@@ -3,7 +3,7 @@
   let data = [];
   export async function preload(page) {
     if (process.browser) {
-      await this.fetch('https://demo.agiledata.io/consume_catalog?apikey=977609nhgfty86HJKhjkl78', {
+      await this.fetch('https://demo.agiledata.io/events_catalog?apikey=977609nhgfty86HJKhjkl78', {
           credentials: "include"
         })
         .then(res => {
