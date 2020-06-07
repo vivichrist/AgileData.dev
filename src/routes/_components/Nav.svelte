@@ -1,24 +1,35 @@
 <script context="module">
   let menus = {
-    Icealicous: "Link_1 app/coming-soon Link_2 app/coming-soon Link_3 app/coming-soon",
+    Icealicous:
+      "Link_1 app/coming-soon Link_2 app/coming-soon Link_3 app/coming-soon",
     Events: "Add_Event_Views app/coming-soon All_Event_Views app/events",
-    Rules: "Add_Rules app/coming-soon divider 0 All_Rules app/rules Change_Rules app/rules Validation_Rules app/coming-soon Consume_Rules app/coming-soon divider 0 Lineage app/coming-soon",
+    Rules:
+      "Add_Rules app/coming-soon divider 0 All_Rules app/rules Change_Rules app/rules Validation_Rules app/coming-soon Consume_Rules app/coming-soon divider 0 Lineage app/coming-soon",
     Consume: "Add_Consume_Views app/coming-soon All_Consume_Views app/consume",
-    Plus: "Catalog_Details_Mockup app/catalog-details divider 0 Blah_Blah app/coming-soon"
+    Plus:
+      "Catalog_Details_Mockup app/catalog-details divider 0 Blah_Blah app/coming-soon"
   };
 </script>
 
 <script>
-	import MenuItem from "../_components/MenuItem.svelte";
+  import MenuItem from "../_components/MenuItem.svelte";
   import TopItem from "../_components/TopItem.svelte";
   import MenuDrop from "../_components/MenuDrop.svelte";
   import MenuPopup from "../_components/MenuPopup.svelte";
   import Icon from "../_components/Icon.svelte";
+  import { onMount } from "svelte";
+  import { name, img_url } from "../../stores.js";
 
-  export let user = "No User";
-  export let pic = "img/user.png";
+  let user;
+  let pic;
+  onMount(() => {
+    user = $name ? $name : "No User";
+    pic = $img_url ? $img_url : "img/user.png";
+  });
+  console.log(`User: ${user}`);
+  console.log(`Picture Location: ${pic}`);
 
-	export let segment;
+  export let segment;
 </script>
 
 <style>
@@ -105,32 +116,42 @@
 </style>
 
 <nav class="navbar navbar-expand-md bg-primary d-flex flex-row fixed-top">
-  <button class="navbar-toggler" type="button" data-toggle="collapse"
-          data-target="#collapsibleNavbar">
-    <span class="navbar-toggler-icon"></span>
+  <button
+    class="navbar-toggler"
+    type="button"
+    data-toggle="collapse"
+    data-target="#collapsibleNavbar">
+    <span class="navbar-toggler-icon" />
   </button>
   <!-- nav menu -->
-  <div class="collapse navbar-collapse align-items-stretch" id="collapsibleNavbar">
-    <MenuDrop title="Icealicous" items="{menus.Icealicous}" />
+  <div
+    class="collapse navbar-collapse align-items-stretch"
+    id="collapsibleNavbar">
+    <MenuDrop title="Icealicous" items={menus.Icealicous} />
     <nav class="navbar-nav align-items-stretch justify-content-around left">
-      <div class="nav-item d-flex flex-fill btn-group align-self-center under"
-           class:current={segment === 'catalog'}>
+      <div
+        class="nav-item d-flex flex-fill btn-group align-self-center under"
+        class:current={segment === 'catalog'}>
         <TopItem item="app/catalog">Catalog</TopItem>
       </div>
-      <div class="nav-item d-flex flex-fill btn-group align-self-center under"
-           class:current={segment === 'events'}>
-        <MenuItem title="Events" items="{menus.Events}" />
+      <div
+        class="nav-item d-flex flex-fill btn-group align-self-center under"
+        class:current={segment === 'events'}>
+        <MenuItem title="Events" items={menus.Events} />
       </div>
-      <div class="nav-item d-flex flex-fill btn-group align-self-center under"
-           class:current={segment === 'rules'}>
-        <MenuItem title="Rules" items="{menus.Rules}" />
+      <div
+        class="nav-item d-flex flex-fill btn-group align-self-center under"
+        class:current={segment === 'rules'}>
+        <MenuItem title="Rules" items={menus.Rules} />
       </div>
-      <div class="nav-item d-flex flex-fill btn-group align-self-center under"
-           class:current={segment === 'consume'}>
-        <MenuItem title="Consume" items="{menus.Consume}" />
+      <div
+        class="nav-item d-flex flex-fill btn-group align-self-center under"
+        class:current={segment === 'consume'}>
+        <MenuItem title="Consume" items={menus.Consume} />
       </div>
-      <div class="nav-item d-flex flex-fill btn-group align-self-center under"
-           class:current={segment === 'search'}>
+      <div
+        class="nav-item d-flex flex-fill btn-group align-self-center under"
+        class:current={segment === 'search'}>
         <TopItem item="app/search">Manage</TopItem>
       </div>
     </nav>

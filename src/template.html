@@ -41,69 +41,30 @@
       }
     </style>
 
-    <script async defer>
-      window.signOut = () => {
-        const auth2 = gapi.auth2.getAuthInstance();
-        auth2.signOut().then(() => {
-          sessionStorage.removeItem("id");
-          sessionStorage.removeItem("name");
-          sessionStorage.removeItem("given_name");
-          sessionStorage.removeItem("family_name");
-          sessionStorage.removeItem("img_url");
-          sessionStorage.removeItem("email");
-          sessionStorage.removeItem("token");
-
-          document.getElementById("SignInWrapper").style.display = "block";
-          console.log("onsign-out");
-        });
-      };
-      window.startApp = function () {
-        gapi.load("auth2", function () {
-          // Retrieve the singleton for the GoogleAuth library and set up the client.
-          let auth2 = gapi.auth2.init({
-            client_id:
-              "865193817161-j3sjhd6d09488ih4lnnijhqvdsvud2pq.apps.googleusercontent.com",
-            cookiepolicy: "single_host_origin",
-            scope: "profile email",
-          });
-          let element = document.getElementById("customBtn");
-          auth2.attachClickHandler(
-            element,
-            {},
-            function (user) {
-              onSignIn(user);
-            },
-            function (error) {
-              alert(JSON.stringify(error, undefined, 2));
-            }
-          );
-        });
-      };
-    </script>
     <!-- Sapper generates a <style> tag containing critical CSS
-	     for the current page. CSS for the rest of the app is
-	     lazily loaded when it precaches secondary pages -->
+      for the current page. CSS for the rest of the app is
+      lazily loaded when it precaches secondary pages -->
     %sapper.styles%
 
     <link rel="stylesheet" href="/css/custom.css" />
     <!-- This contains the contents of the <svelte:head> component, if
-	     the current page has one -->
+      the current page has one -->
     %sapper.head%
     <link rel="stylesheet" href="/fontawesome/css/all.min.css" defer />
     <script src="/jquery-slim/dist/jquery.slim.min.js" defer></script>
     <script src="/bootstrap/dist/js/bootstrap.bundle.min.js" defer></script>
   </head>
-  <body onload="startApp">
+  <body>
     <!-- The application will be rendered inside this element,
-	     because `src/client.js` references it -->
+      because `src/client.js` references it -->
     <div id="sapper">
       %sapper.html%
     </div>
 
-    <!-- Sapper creates a <script> tag containing `src/client.js`
-	     and anything else it needs to hydrate the app and
-	     initialise the router -->
-    %sapper.scripts%
     <script src="https://apis.google.com/js/api:client.js" async defer></script>
+    <!-- Sapper creates a <script> tag containing `src/client.js`
+      and anything else it needs to hydrate the app and
+      initialise the router -->
+    %sapper.scripts%
   </body>
 </html>
