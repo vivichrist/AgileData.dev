@@ -8,7 +8,7 @@ import config from "sapper/config/rollup.js";
 import pkg from "./package.json";
 
 const mode = process.env.NODE_ENV;
-const deploy = process.env.DEMO === "1" || false;
+const deploy = process.env.DEMO == 1 || false;
 const dev = mode === "development";
 const legacy = !!process.env.SAPPER_LEGACY_BUILD;
 
