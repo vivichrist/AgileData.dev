@@ -128,7 +128,11 @@
     // let incl = page.query.inc || false;
     if (process.browser) {
       await this.fetch(
-        `${mode ? "/api" : "https://demo.agiledata.io/api/combined_catalog"}`,
+        `${
+          mode
+            ? "/api/combined_catalog"
+            : "https://demo.agiledata.io/api/combined_catalog"
+        }`,
         {
           credentials: "include"
         }

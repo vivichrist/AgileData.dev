@@ -5,7 +5,7 @@
   export async function preload(page) {
     if (process.browser) {
       await this.fetch(
-        `${mode ? "/api" : "https://demo.agiledata.io/api/rules"}`,
+        `${mode ? "/api/rules" : "https://demo.agiledata.io/api/rules"}`,
         {
           credentials: "include"
         }

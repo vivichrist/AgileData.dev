@@ -5,7 +5,11 @@
   export async function preload(page) {
     if (process.browser) {
       await this.fetch(
-        `${mode ? "/api" : "https://demo.agiledata.io/api/consume_catalog"}`,
+        `${
+          mode
+            ? "/api/consume_catalog"
+            : "https://demo.agiledata.io/api/consume_catalog"
+        }`,
         {
           credentials: "include"
         }
