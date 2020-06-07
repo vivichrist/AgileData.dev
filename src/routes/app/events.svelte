@@ -1,29 +1,40 @@
 <script context="module">
-
   let data = [];
+  const mode = !!process.env.DEMO === 1 || false;
+
   export async function preload(page) {
     if (process.browser) {
-      await this.fetch('https://demo.agiledata.io/events_catalog?apikey=977609nhgfty86HJKhjkl78', {
+      await this.fetch(
+        `${mode ? "/api" : "https://demo.agiledata.io/api/events_catalog"}`,
+        {
           credentials: "include"
-        })
+        }
+      )
         .then(res => {
           if (!res.ok) {
-            throw new Error('Network response for Consume table was not ok');
+            throw new Error("Network response for Consume table was not ok");
           }
-          return res.json()
+          return res.json();
         })
-        .then(jsn => data = jsn.map(obj => {
-          for (let key in obj) {
-            if (obj[key]) {
-              if (typeof(obj[key]) === 'string') {
-                obj[key] = obj[key].replace(/_/g, ' '); // remove underscores
-              } else if (Array.isArray(obj[key])) {
-                obj[key] = obj[key].join(' ');
-              } else {obj[key] = `${obj[key]}`};
-            } else {obj[key] = ""};
-          }
-          return obj;
-        }));
+        .then(
+          jsn =>
+            (data = jsn.map(obj => {
+              for (let key in obj) {
+                if (obj[key]) {
+                  if (typeof obj[key] === "string") {
+                    obj[key] = obj[key].replace(/_/g, " "); // remove underscores
+                  } else if (Array.isArray(obj[key])) {
+                    obj[key] = obj[key].join(" ");
+                  } else {
+                    obj[key] = `${obj[key]}`;
+                  }
+                } else {
+                  obj[key] = "";
+                }
+              }
+              return obj;
+            }))
+        );
     }
     return undefined;
   }
@@ -51,11 +62,12 @@
   };
 
   // filter the data according to the associated input boxes
-  $: fdata = data.filter(d => { // data filtered from all the data
-      return Object.entries(ftype).every( t => {
-        return d[t[0].toLowerCase()].search(t[1]) >= 0;
-      });
+  $: fdata = data.filter(d => {
+    // data filtered from all the data
+    return Object.entries(ftype).every(t => {
+      return d[t[0].toLowerCase()].search(t[1]) >= 0;
     });
+  });
   // how many pages of items in total.
   $: limit = Math.ceil(fdata.length / rng);
   // start index of the current page.
@@ -65,7 +77,7 @@
   // page data segment from fdata.
   $: dataseg = fdata.slice(startrng, endrng);
 
-  const sortByColumn = (col) => {
+  const sortByColumn = col => {
     if (column === col) {
       sorting = sorting ? 0 : 1; // flip sorting order
     } else {
@@ -74,22 +86,30 @@
     }
     if (sorting < 2) {
       let c = col.toLowerCase();
-      data.sort( function(a, b) {
+      data.sort(function(a, b) {
         if (col === "Row_Count") {
           let x = parseInt(a[c], 10);
           let y = parseInt(b[c], 10);
-          if (x < y) {return sorting === 0 ? -1 : 1;};
-          if (x > y) {return sorting === 0 ?  1 :-1;};
+          if (x < y) {
+            return sorting === 0 ? -1 : 1;
+          }
+          if (x > y) {
+            return sorting === 0 ? 1 : -1;
+          }
         } else {
           let x = a[c].toLowerCase();
           let y = b[c].toLowerCase();
-          if (x < y) {return sorting === 0 ? -1 : 1;};
-          if (x > y) {return sorting === 0 ?  1 :-1;};
+          if (x < y) {
+            return sorting === 0 ? -1 : 1;
+          }
+          if (x > y) {
+            return sorting === 0 ? 1 : -1;
+          }
         }
         return 0;
       });
-      fdata = data.filter( d => {
-        return Object.entries(ftype).every( t => {
+      fdata = data.filter(d => {
+        return Object.entries(ftype).every(t => {
           return d[t[0].toLowerCase()].search(t[1]) >= 0;
         });
       });
@@ -97,37 +117,6 @@
     }
   };
 </script>
-
-<div class="nav sticky-top w-100 nav-fill bg-white border-bottom border-ternary">
-  <span class="nav-item text-left p-2" role="button">
-    <i class="fa fa-plus"></i> Add a Rule
-  </span>
-</div>
-<div class="d-flex flex-column">
-  <div class="inner table-responsive">
-  <table class="table bg-white">
-    <thead class="thead-black">
-      <tr>
-        {#each [...Object.keys(ftype)] as name}
-        <RuleColumn name={name} bind:filter={ftype[name]} bind:column={column}
-                    callback={() => sortByColumn(name)} bind:sort={sorting} />
-        {/each}
-      </tr>
-    </thead>
-    <tbody>
-    {#each dataseg as seg}
-      <tr>
-      {#each [...Object.keys(ftype)] as name}
-        <th class="text-truncate rows">{seg[name.toLowerCase()]}</th>
-      {/each}
-      </tr>
-    {/each}
-    </tbody>
-  </table>
-    <Pagination pages={Math.min(5, fdata.length)} bind:pos={pos}
-                bind:limit={limit} bind:rng={rng}/>
-  </div>
-</div>
 
 <style>
   .nav {
@@ -175,5 +164,44 @@
     box-sizing: border-box;
     max-width: 100%;
   }
-
 </style>
+
+<div
+  class="nav sticky-top w-100 nav-fill bg-white border-bottom border-ternary">
+  <span class="nav-item text-left p-2" role="button">
+    <i class="fa fa-plus" />
+    Add a Rule
+  </span>
+</div>
+<div class="d-flex flex-column">
+  <div class="inner table-responsive">
+    <table class="table bg-white">
+      <thead class="thead-black">
+        <tr>
+          {#each [...Object.keys(ftype)] as name}
+            <RuleColumn
+              {name}
+              bind:filter={ftype[name]}
+              bind:column
+              callback={() => sortByColumn(name)}
+              bind:sort={sorting} />
+          {/each}
+        </tr>
+      </thead>
+      <tbody>
+        {#each dataseg as seg}
+          <tr>
+            {#each [...Object.keys(ftype)] as name}
+              <th class="text-truncate rows">{seg[name.toLowerCase()]}</th>
+            {/each}
+          </tr>
+        {/each}
+      </tbody>
+    </table>
+    <Pagination
+      pages={Math.min(5, fdata.length)}
+      bind:pos
+      bind:limit
+      bind:rng />
+  </div>
+</div>
