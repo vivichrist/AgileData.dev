@@ -10,7 +10,7 @@
   // const compareKV = (a, b) => {
   //   return topics.get(a).length - topics.get(b).length;
   // }
-  const mode = !!process.env.DEMO === 1 || false;
+  const mode = process.env.DEMO || false;
 
   const filter_not = obj => {
     all_cat.add(obj.object);

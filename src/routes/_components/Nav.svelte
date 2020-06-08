@@ -26,8 +26,8 @@
     user = $name ? $name : "No User";
     pic = $img_url ? $img_url : "img/user.png";
   });
-  console.log(`User: ${user}`);
-  console.log(`Picture Location: ${pic}`);
+  console.log(`User: ${$name}`);
+  console.log(`Picture Location: ${$img_url}`);
 
   export let segment;
 </script>

@@ -1,6 +1,6 @@
 <script context="module">
   let data = [];
-  const mode = !!process.env.DEMO === 1 || false;
+  const mode = process.env.DEMO || false;
 
   export async function preload(page) {
     if (process.browser) {

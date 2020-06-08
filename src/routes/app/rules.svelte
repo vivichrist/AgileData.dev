@@ -1,5 +1,5 @@
 <script context="module">
-  const mode = !!process.env.DEMO === 1 || false;
+  const mode = process.env.DEMO || false;
   let data = [];
 
   export async function preload(page) {
