@@ -29,4 +29,4 @@
   });
 </script>
 
-<button onclick="signOut">Sign out</button>
+<button onclick="signOut();">Sign out</button>

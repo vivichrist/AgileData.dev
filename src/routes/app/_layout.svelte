@@ -1,5 +1,6 @@
 <script>
-  // import Menu from '../components/Menu.svelte';
+  import { stores } from "@sapper/app";
+  import GoogleAnalytics from "../_components/GoogleAnalytics.svelte";
   import Nav from "../_components/Nav.svelte";
 
   export let segment;
@@ -19,6 +20,7 @@
   <title>AgileData.io</title>
 </svelte:head>
 
+<GoogleAnalytics />
 <Nav {segment} />
 
 <div

@@ -117,15 +117,12 @@
     } else if (Array.isArray(f)) {
       // should be an array of strings
       data.forEach(e => filter_exclude(fstr, e));
-      // cat_filter = new Set(categories.keys());
-      // top_filter = new Set(topics.keys());
       console.log(`filter with: ${fstr}`);
     }
   };
 
   export async function preload(page) {
     let filterstr = page.query.filter || "0";
-    // let incl = page.query.inc || false;
     if (process.browser) {
       await this.fetch(
         `${

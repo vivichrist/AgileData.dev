@@ -21,7 +21,8 @@
             (data = jsn.map(obj => {
               for (let key in obj) {
                 if (obj[key]) {
-                  obj[key] = obj[key].replace(/_/g, " "); // remove underscores
+                  // remove underscores
+                  obj[key] = obj[key].replace(/_/g, " ");
                 } else {
                   obj[key] = "";
                 }

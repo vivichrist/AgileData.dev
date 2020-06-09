@@ -2,7 +2,7 @@
   const mode = process.env.DEMO || false;
   let data = [];
 
-  export async function preload(page) {
+  export async function preload() {
     if (process.browser) {
       await this.fetch(
         `${
