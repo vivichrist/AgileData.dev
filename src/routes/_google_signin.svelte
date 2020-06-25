@@ -7,11 +7,11 @@
     family_name,
     img_url,
     email,
-    token
+    token,
   } from "../stores.js";
 
   onMount(() => {
-    window.onSignIn = user => {
+    window.onSignIn = (user) => {
       // Useful data for your client-side scripts:
       const profile = user.getBasicProfile();
       // The ID token you need to pass to your backend:
@@ -24,26 +24,27 @@
       $token = user.getAuthResponse().id_token;
 
       document.getElementById("SignInWrapper").style.display = "none";
-      console.log("onsign-in");
+      console.log("onSign-in called.");
     };
-    window.startApp = function() {
-      gapi.load("auth2", function() {
+
+    window.startApp = function () {
+      gapi.load("auth2", function () {
         // Retrieve the singleton for the GoogleAuth library and set up the client.
         let auth2 = gapi.auth2.init({
           client_id:
             "865193817161-j3sjhd6d09488ih4lnnijhqvdsvud2pq.apps.googleusercontent.com",
-          cookiepolicy: "agiledata.io agiledata-dev.now.sh",
-          scope: "profile email"
+          cookiepolicy: "agiledata.io vercel.app",
+          scope: "profile email",
         });
         let element = document.getElementById("customBtn");
         auth2.attachClickHandler(
           element,
           {},
-          function(user) {
-            console.log(user);
+          function (user) {
+            console.log(`SignIn user: ${user}`);
             onSignIn(user);
           },
-          function(error) {
+          function (error) {
             alert(JSON.stringify(error, undefined, 2));
             document.getElementById(
               "SignInWrapper"
@@ -78,6 +79,11 @@
   }
 </style>
 
+<svelte:head>
+  <script src="https://apis.google.com/js/api:client.js" async defer>
+
+  </script>
+</svelte:head>
 <!-- <div class="g-signin2" data-longtitle="true" data-onsuccess="onSignIn" /> -->
 <div
   id="SignInWrapper"

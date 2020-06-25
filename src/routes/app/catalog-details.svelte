@@ -1,7 +1,7 @@
 <script>
-  /* import { pageseg } from "../../stores.js"; */
+  import { pageseg } from "../../stores.js";
 
-  export let data = $pageseg;
+  let data = $pageseg;
 </script>
 
 <style>
@@ -39,7 +39,7 @@
   <div class="row">
     <div class="col-md-6 columns">
       <span class="float-right mt-4">
-        {#each data.topics as topic}
+        {#each data.topics.split(/s+/g) as topic}
           <span class="btn btn-outline-ternary rounded-pill">{topic}</span>
         {/each}
       </span>
@@ -59,7 +59,7 @@
               id="v-tabs-2"
               role="tabpanel"
               aria-labelledby="v-tabs-2-tab">
-              {data.name}
+              {data.table_name}
             </div>
             <div
               class="tab-pane fade"
