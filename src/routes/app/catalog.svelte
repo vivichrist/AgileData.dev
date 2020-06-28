@@ -12,14 +12,14 @@
   // }
   const mode = process.env.DEMO || false;
 
-  const filter_not = obj => {
+  const filter_not = (obj) => {
     all_cat.add(obj.object);
     if (categories.has(obj.object)) {
       categories.get(obj.object).push(obj);
     } else {
       categories.set(obj.object, [obj]);
     }
-    obj.topics.forEach(element => {
+    obj.topics.forEach((element) => {
       all_top.add(element);
       if (topics.has(element)) {
         topics.get(element).push(obj);
@@ -38,7 +38,7 @@
         categories.set(obj.object, [obj]);
       }
     }
-    obj.topics.forEach(element => {
+    obj.topics.forEach((element) => {
       all_top.add(element);
       if (filt.includes(element)) {
         if (topics.has(element)) {
@@ -61,7 +61,7 @@
       }
       // include all related topics
       if (inc)
-        obj.topics.forEach(element => {
+        obj.topics.forEach((element) => {
           all_top.add(element);
           top_filter.add(element);
         });
@@ -69,7 +69,7 @@
   };
 
   const filter_top = (filt, obj, inc) => {
-    obj.topics.forEach(element => {
+    obj.topics.forEach((element) => {
       all_top.add(element);
       if (filt.includes(element)) {
         // top_filter.add(element);
@@ -87,36 +87,36 @@
     all_cat.add(obj.object);
   };
 
-  const filter_by = fstr => {
+  const filter_by = (fstr) => {
     if (typeof fstr === "string") {
       if (fstr === "0") {
-        data.forEach(e => filter_not(e));
+        data.forEach((e) => filter_not(e));
         top_filter = all_top;
         cat_filter = all_cat;
       } else if (fstr === "topics") {
         // All topics
-        data.forEach(e => filter_not(e));
+        data.forEach((e) => filter_not(e));
         top_filter = all_top;
         cat_filter = new Set();
       } else {
         // One Area or One Topic
         let regex = /history|event|concept|consume|detail/g;
         if (regex.test(fstr)) {
-          data.forEach(e => filter_cat([fstr], e, true));
+          data.forEach((e) => filter_cat([fstr], e, true));
           [...categories.values()]
             .flat(2)
-            .forEach(e => filter_top([fstr, ...top_filter], e, false));
+            .forEach((e) => filter_top([fstr, ...top_filter], e, false));
         } else {
-          data.forEach(e => filter_top([fstr], e, true));
+          data.forEach((e) => filter_top([fstr], e, true));
           [...topics.values()]
             .flat(2)
-            .forEach(e => filter_cat([fstr, ...cat_filter], e, false));
+            .forEach((e) => filter_cat([fstr, ...cat_filter], e, false));
           top_filter = new Set();
         }
       }
     } else if (Array.isArray(f)) {
       // should be an array of strings
-      data.forEach(e => filter_exclude(fstr, e));
+      data.forEach((e) => filter_exclude(fstr, e));
       console.log(`filter with: ${fstr}`);
     }
   };
@@ -131,18 +131,18 @@
             : "https://demo.agiledata.io/api/combined_catalog"
         }`,
         {
-          credentials: "include"
+          credentials: "include",
         }
       )
-        .then(res => {
+        .then((res) => {
           if (!res.ok) {
             throw new Error("Network response for Catagory views has failed");
           }
           return res.json();
         })
         .then(
-          jsn =>
-            (data = jsn.map(obj => {
+          (jsn) =>
+            (data = jsn.map((obj) => {
               obj.topics.sort();
               return obj;
             }))

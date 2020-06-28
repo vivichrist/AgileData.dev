@@ -7,6 +7,7 @@ import { terser } from "rollup-plugin-terser";
 import config from "sapper/config/rollup.js";
 import pkg from "./package.json";
 
+const stamp = Date.now();
 const mode = process.env.NODE_ENV;
 const deploy = process.env.DEMO == 1 || false;
 const dev = mode === "development";
@@ -26,6 +27,7 @@ export default {
         "process.browser": true,
         "process.env.NODE_ENV": JSON.stringify(mode),
         "process.env.DEMO": deploy,
+        "process.env.STAMP": stamp,
       }),
       svelte({
         dev,
@@ -79,6 +81,7 @@ export default {
         "process.browser": false,
         "process.env.NODE_ENV": JSON.stringify(mode),
         "process.env.DEMO": deploy,
+        "process.env.STAMP": stamp,
       }),
       svelte({
         generate: "ssr",
@@ -106,6 +109,7 @@ export default {
         "process.browser": true,
         "process.env.NODE_ENV": JSON.stringify(mode),
         "process.env.DEMO": deploy,
+        "process.env.STAMP": stamp,
       }),
       commonjs(),
       !dev && terser(),
