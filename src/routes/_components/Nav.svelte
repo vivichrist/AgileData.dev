@@ -7,7 +7,7 @@
       "Add_Rules app/coming-soon divider 0 All_Rules app/rules Change_Rules app/rules Validation_Rules app/coming-soon Consume_Rules app/coming-soon divider 0 Lineage app/coming-soon",
     Consume: "Add_Consume_Views app/coming-soon All_Consume_Views app/consume",
     Plus:
-      "Catalog_Details_Mockup app/catalog-details divider 0 Blah_Blah app/coming-soon"
+      "Catalog_Details_Mockup app/catalog-details divider 0 Blah_Blah app/coming-soon",
   };
 </script>
 
@@ -114,6 +114,10 @@
     }
   }
 </style>
+
+<svelte:head>
+  <title>AgileData.io - {process.env.STAMP}</title>
+</svelte:head>
 
 <nav class="navbar navbar-expand-md bg-primary d-flex flex-row fixed-top">
   <button

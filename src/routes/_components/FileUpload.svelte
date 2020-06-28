@@ -25,7 +25,7 @@
     entered = false;
   };
 
-  const submitting = e => {
+  const submitting = (e) => {
     if (submitted) return false;
 
     err = false;
@@ -36,7 +36,7 @@
       let theData = new FormData(form.get(0));
 
       if (droppedFiles) {
-        droppedFiles.forEach(file => {
+        droppedFiles.forEach((file) => {
           theData.append(file.name, file);
         });
       }
@@ -53,11 +53,11 @@
             credentials: "include",
             mode: "cors",
             headers: { "content-type": "application/json" },
-            body: JSON.stringify(theData)
+            body: JSON.stringify(theData),
           }
         )
-        .then(response => response.json())
-        .then(res => {
+        .then((response) => response.json())
+        .then((res) => {
           if (res.ok) {
             console.log(`Upload Successful: ${res.statusText}`);
           } else {
@@ -66,7 +66,7 @@
             );
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.error("Fetch Error: ", error);
         });
 
@@ -117,7 +117,7 @@
   class:is-dragover={entered}
   class:is-uploading={submitted}
   class:is-error={err}
-  on:drag={e => {
+  on:drag={(e) => {
     e.preventDefault();
     e.stopPropagation();
   }}
@@ -126,7 +126,7 @@
   on:dragover|preventDefault|stopPropagation={enter}
   on:dragenter|preventDefault|stopPropagation={enter}
   on:dragleave|preventDefault|stopPropagation={end}
-  on:drop|preventDefault|stopPropagation={e => (droppedFiles = e.originalEvent.dataTransfer.files)}
+  on:drop|preventDefault|stopPropagation={(e) => (droppedFiles = e.originalEvent.dataTransfer.files)}
   id="box"
   method="POST"
   action=""
