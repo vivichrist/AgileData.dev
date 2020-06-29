@@ -17,7 +17,7 @@
 </style>
 
 <svelte:head>
-  <title>AgileData.io</title>
+  <title>AgileData.io - process.env.STAMP</title>
 </svelte:head>
 
 <GoogleAnalytics />

@@ -34,7 +34,7 @@
 </style>
 
 <svelte:head>
-  <title>AgileData Login - {process.env.STAMP}</title>
+  <title>AgileData Login - process.env.STAMP</title>
 </svelte:head>
 
 <div

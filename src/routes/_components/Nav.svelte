@@ -115,10 +115,6 @@
   }
 </style>
 
-<svelte:head>
-  <title>AgileData.io - {process.env.STAMP}</title>
-</svelte:head>
-
 <nav class="navbar navbar-expand-md bg-primary d-flex flex-row fixed-top">
   <button
     class="navbar-toggler"
