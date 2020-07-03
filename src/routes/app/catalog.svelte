@@ -10,7 +10,8 @@
   // const compareKV = (a, b) => {
   //   return topics.get(a).length - topics.get(b).length;
   // }
-  const mode = process.env.DEMO || false;
+  const mode = process.env.DEMO;
+  const api = process.env.AGILEDATA_API;
 
   const filter_not = (obj) => {
     all_cat.add(obj.object);
@@ -125,14 +126,8 @@
     let filterstr = page.query.filter || "0";
     if (process.browser) {
       await this.fetch(
-        `${
-          mode
-            ? "/api/combined_catalog"
-            : "https://demo.agiledata.io/api/combined_catalog"
-        }`,
-        {
-          credentials: "include",
-        }
+        mode ? "/api/combined_catalog" : `${api}/api/combined_catalog`,
+        { credentials: "include" }
       )
         .then((res) => {
           if (!res.ok) {

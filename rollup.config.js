@@ -8,8 +8,9 @@ import config from "sapper/config/rollup.js";
 import pkg from "./package.json";
 
 const stamp = new Date().toLocaleString();
-const mode = process.env.NODE_ENV;
+const api = process.env.AGILEDATA_API || "https://demo.agiledata.io";
 const deploy = process.env.DEMO == 1 || false;
+const mode = process.env.NODE_ENV;
 const dev = mode === "development";
 const legacy = !!process.env.SAPPER_LEGACY_BUILD;
 
@@ -28,6 +29,7 @@ export default {
         "process.env.NODE_ENV": JSON.stringify(mode),
         "process.env.DEMO": deploy,
         "process.env.STAMP": stamp,
+        "process.env.AGILEDATA_API": api,
       }),
       svelte({
         dev,
@@ -82,6 +84,7 @@ export default {
         "process.env.NODE_ENV": JSON.stringify(mode),
         "process.env.DEMO": deploy,
         "process.env.STAMP": stamp,
+        "process.env.AGILEDATA_API": api,
       }),
       svelte({
         generate: "ssr",
@@ -110,6 +113,7 @@ export default {
         "process.env.NODE_ENV": JSON.stringify(mode),
         "process.env.DEMO": deploy,
         "process.env.STAMP": stamp,
+        "process.env.AGILEDATA_API": api,
       }),
       commonjs(),
       !dev && terser(),

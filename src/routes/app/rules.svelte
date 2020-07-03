@@ -1,24 +1,23 @@
 <script context="module">
-  const mode = process.env.DEMO || false;
+  const mode = process.env.DEMO;
+  const api = process.env.AGILEDATA_API;
+
   let data = [];
 
   export async function preload(page) {
     if (process.browser) {
-      await this.fetch(
-        `${mode ? "/api/rules" : "https://demo.agiledata.io/api/rules"}`,
-        {
-          credentials: "include"
-        }
-      )
-        .then(res => {
+      await this.fetch(mode ? "/api/rules" : `${api}/api/rules`, {
+        credentials: "include",
+      })
+        .then((res) => {
           if (!res.ok) {
             throw new Error("Network response for rules table was not ok");
           }
           return res.json();
         })
         .then(
-          jsn =>
-            (data = jsn.map(obj => {
+          (jsn) =>
+            (data = jsn.map((obj) => {
               for (let key in obj) {
                 if (obj[key]) {
                   // remove underscores
@@ -52,13 +51,13 @@
     Source_Type: "",
     Target_Object: "",
     Target_Type: "",
-    Primary_Key_Alias: ""
+    Primary_Key_Alias: "",
   };
 
   // filter the data according to the associated input boxes
-  $: fdata = data.filter(d => {
+  $: fdata = data.filter((d) => {
     // data filtered from all the data
-    return Object.entries(ftype).every(t => {
+    return Object.entries(ftype).every((t) => {
       return d[t[0].toLowerCase()].search(t[1]) >= 0;
     });
   });
@@ -71,7 +70,7 @@
   // page data segment from fdata.
   $: dataseg = fdata.slice(startrng, endrng);
 
-  const sortByColumn = col => {
+  const sortByColumn = (col) => {
     if (column === col) {
       sorting = sorting ? 0 : 1; // flip sorting order
     } else {
@@ -80,7 +79,7 @@
     }
     if (sorting < 2) {
       let c = col.toLowerCase();
-      data.sort(function(a, b) {
+      data.sort(function (a, b) {
         let x = a[c].toLowerCase();
         let y = b[c].toLowerCase();
         if (x < y) {
@@ -91,8 +90,8 @@
         }
         return 0;
       });
-      fdata = data.filter(d => {
-        return Object.entries(ftype).every(t => {
+      fdata = data.filter((d) => {
+        return Object.entries(ftype).every((t) => {
           return d[t[0].toLowerCase()].search(t[1]) >= 0;
         });
       });

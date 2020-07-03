@@ -1,28 +1,23 @@
 <script context="module">
-  const mode = process.env.DEMO || false;
+  const mode = process.env.DEMO;
+  const api = process.env.AGILEDATA_API;
   let data = [];
 
   export async function preload() {
     if (process.browser) {
       await this.fetch(
-        `${
-          mode
-            ? "/api/consume_catalog"
-            : "https://demo.agiledata.io/api/consume_catalog"
-        }`,
-        {
-          credentials: "include"
-        }
+        mode ? "/api/consume_catalog" : `${api}/api/consume_catalog`,
+        { credentials: "include" }
       )
-        .then(res => {
+        .then((res) => {
           if (!res.ok) {
             throw new Error("Network response for Consume table was not ok");
           }
           return res.json();
         })
         .then(
-          jsn =>
-            (data = jsn.map(obj => {
+          (jsn) =>
+            (data = jsn.map((obj) => {
               for (let key in obj) {
                 if (obj[key]) {
                   if (typeof obj[key] === "string") {
@@ -62,13 +57,13 @@
     Description: "",
     Topics: "",
     Row_Count: "",
-    Last_Refreshed: ""
+    Last_Refreshed: "",
   };
 
   // filter the data according to the associated input boxes
-  $: fdata = data.filter(d => {
+  $: fdata = data.filter((d) => {
     // data filtered from all the data
-    return Object.entries(ftype).every(t => {
+    return Object.entries(ftype).every((t) => {
       return d[t[0].toLowerCase()].search(t[1]) >= 0;
     });
   });
@@ -81,7 +76,7 @@
   // page data segment from fdata.
   $: dataseg = fdata.slice(startrng, endrng);
 
-  const sortByColumn = col => {
+  const sortByColumn = (col) => {
     if (column === col) {
       sorting = sorting ? 0 : 1; // flip sorting order
     } else {
@@ -90,7 +85,7 @@
     }
     if (sorting < 2) {
       let c = col.toLowerCase();
-      data.sort(function(a, b) {
+      data.sort(function (a, b) {
         if (col === "Row_Count") {
           let x = parseInt(a[c], 10);
           let y = parseInt(b[c], 10);
@@ -112,8 +107,8 @@
         }
         return 0;
       });
-      fdata = data.filter(d => {
-        return Object.entries(ftype).every(t => {
+      fdata = data.filter((d) => {
+        return Object.entries(ftype).every((t) => {
           return d[t[0].toLowerCase()].search(t[1]) >= 0;
         });
       });
