@@ -1,5 +1,6 @@
 <script>
-  const mode = process.env.DEMO || false;
+  const mode = process.env.DEMO;
+  const api = process.env.AGILEDATA_API;
 
   const isAdvancedUpload = () => {
     let div = document.createElement("div");
@@ -42,20 +43,13 @@
       }
 
       window
-        .fetch(
-          `${
-            mode
-              ? "/api/upload_file"
-              : "https://demo.agiledata.io/api/upload_file"
-          }`,
-          {
-            method: form.attr("method"),
-            credentials: "include",
-            mode: "cors",
-            headers: { "content-type": "application/json" },
-            body: JSON.stringify(theData),
-          }
-        )
+        .fetch(mode ? "/api/upload_file" : `${api}/api/upload_file`, {
+          method: form.attr("method"),
+          credentials: "include",
+          mode: "cors",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify(theData),
+        })
         .then((response) => response.json())
         .then((res) => {
           if (res.ok) {
